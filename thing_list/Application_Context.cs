@@ -16,7 +16,7 @@ namespace thing_list
         public Application_Context() => Database.EnsureCreated();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=db.db");
+            optionsBuilder.UseSqlite("Data Source=../../../db.db");
         }
 
        
