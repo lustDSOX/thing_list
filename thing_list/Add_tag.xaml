@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:thing_list"
         mc:Ignorable="d"
-        Title="Add_tag" Height="450" Width="800" Background="#0D0D0D">
+        Title="Add_tag" Height="450" Width="800" Background="#0D0D0D" WindowStyle="None" ResizeMode="NoResize">
     <Window.Resources>
         <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="#262626"/>
@@ -71,6 +71,15 @@
         </Grid.RowDefinitions>
 
         <TextBox x:Name="name" Style="{DynamicResource TextBoxStyle1}" Grid.Column="1" Grid.Row='1'/>
-        <Button x:Name="btn" Content="Добавить категорию" Grid.Column="1" Grid.Row="3" Style="{DynamicResource ButtonStyle1}" Click="Button_Click"/>
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btn" Content="Добавить категорию"  Style="{DynamicResource ButtonStyle1}" Click="Button_Click"/>
+            <Button Content="Отмена" Grid.Column="2" Style="{DynamicResource ButtonStyle1}" Click="Button_Click_1"/>
+        </Grid>
+        
     </Grid>
 </Window>

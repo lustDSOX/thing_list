@@ -12,18 +12,14 @@ namespace thing_list
         public string name { get; set; }
         public string number { get; set; }
         public int count { get; set; }
-        public int id_location { get; set; }
+        public string? date { get; set; }
         public List<Tag> Tags { get; set; } = new();
-        //public List<Tag_thing> Tag_Things { get; set; } = new();
 
-        public Thing() { }
-
-        public Thing(string name, string number, int count, int id_location)
+        public Thing(string name, string number, int count)
         {
             this.name = name;
             this.number = number;
-            this.count = count;
-            this.id_location = id_location;
+            this.count = count;           
         }
 
     }

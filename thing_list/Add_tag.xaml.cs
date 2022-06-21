@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace thing_list
 {
-    /// <summary>
-    /// Логика взаимодействия для Add_tag.xaml
-    /// </summary>
     public partial class Add_tag : Window
     {
         Application_Context db;
@@ -60,6 +57,11 @@ namespace thing_list
                 add_Page.Update_ListLocations(true);
                 Close();
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:thing_list"
         mc:Ignorable="d"
-        Title="Add_employee" Height="450" Width="800" Background="#0D0D0D">
+        Title="Add_employee" Height="450" Width="800" Background="#0D0D0D" WindowStyle="None">
     <Window.Resources>
         <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="#262626"/>
@@ -77,6 +77,15 @@
         <TextBox x:Name="surname" GotFocus="Got_focus" LostFocus="Lost_focus" Grid.Column="1" Grid.Row="1" Style="{DynamicResource TextBoxStyle1}" Text="Фамилия"/>
         <TextBox x:Name="name" GotFocus="Got_focus" LostFocus="Lost_focus" Grid.Column="1" Grid.Row="3" Style="{DynamicResource TextBoxStyle1}" Text="Имя"/>
         <TextBox x:Name="patronymic" GotFocus="Got_focus" LostFocus="Lost_focus" Grid.Column="1" Grid.Row="5" Style="{DynamicResource TextBoxStyle1}" Text="Отчество"/>
-        <Button Grid.Column="1" Grid.Row="7" Content="Добавить сотрудника" Style="{DynamicResource ButtonStyle1}" Click="Button_Click"/>
+        <Grid Grid.Column="1" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Добавить сотрудника" Grid.Column="0" Style="{DynamicResource ButtonStyle1}" Click="Button_Click"/>
+            <Button Content="Отмена" Grid.Column="2" Style="{DynamicResource ButtonStyle1}" Click="Button_Click_1" />
+        </Grid>
+        
     </Grid>
 </Window>

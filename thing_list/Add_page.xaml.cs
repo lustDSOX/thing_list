@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace thing_list
 {
-    /// <summary>
-    /// Логика взаимодействия для Add_page.xaml
-    /// </summary>
     public partial class Add_page : Page
     {
         Application_Context db;
@@ -26,9 +16,13 @@ namespace thing_list
         Main_page main_Page;
         public int tag_col = 0;
         public int tag_row = 1;
+        public Grid editing_grid;
+        public Thing editing_thing;
         const string tagBtn_name = "add_tagBtn";
         const string locBtn_name = "add_locBtn";
         const string emplBtn_name = "add_emplBtn";
+        const string addBtn = "Добавить запись";
+        const string editBtn = "Изменить запись";
 
         public Add_page(MainWindow _window1, Application_Context context, Main_page main)
         {
@@ -36,6 +30,59 @@ namespace thing_list
             db = context; ;
             window1 = _window1;
             main_Page = main;
+        }
+
+        public void Clear()
+        {
+            name.Clear();
+            number.Clear();
+            ComboBox_employee.Text = "";
+            ComboBox_location.Text = "";
+            count_things.Text = "0";
+            date.Text = "";
+            select_tags.Children.RemoveRange(0, select_tags.Children.Count);
+            Add_btn.Content = "Добавить запись";
+            tag_col = 0;
+            tag_row = 1;
+        }
+        public void Edit_thing(Thing thing, Grid grid)
+        {
+            editing_thing = thing;
+            editing_grid = grid;
+            name.Text = thing.name;
+            number.Text = thing.number;
+            foreach (Location location in db.Locations)
+            {
+                foreach (Thing item in location.Things)
+                {
+                    if (item.id == thing.id)
+                    {
+                        ComboBox_location.Text = location.name;
+                        break;
+                    }
+                }
+            }
+            count_things.Text = thing.count.ToString();
+            foreach (Tag tag in thing.Tags)
+            {
+                Add_selected_tag(tag.name);
+            }
+            foreach (Employee employee in db.Employees)
+            {
+                foreach (Thing thing_emp in employee.Things)
+                {
+                    if (thing_emp.id == thing.id)
+                        ComboBox_employee.Text = $"{employee.name} {employee.surname} {employee.patronymic}";
+                }
+
+            }
+
+            if (thing.date == null)
+                date.SelectedDate = DateTime.Now;
+            else
+                date.Text = thing.date;
+
+            Add_btn.Content = "Изменить запись";
         }
 
         public void Update_ListTags(bool last)
@@ -302,55 +349,130 @@ namespace thing_list
 
         private void Add_btn_Click(object sender, RoutedEventArgs e)
         {
-
-            if (name.Text != "" && ComboBox_location.Text != "" && number.Text != "" && count_things.Text != "0" && select_tags.Children.Count > 0)
+            List<Location> locations = db.Locations.ToList();
+            List<Employee> employees = db.Employees.ToList();
+            switch (Add_btn.Content)
             {
-                List<Location> locations = db.Locations.ToList();
-                foreach (Location loc in locations)
-                {
-                    if (loc.name == ComboBox_location.Text)
+                case addBtn:
+                    if (name.Text != "" && ComboBox_location.Text != "" && number.Text != "" && count_things.Text != "0" && select_tags.Children.Count > 0)
                     {
-                        Thing thing = new Thing(name.Text, number.Text, Convert.ToInt32(count_things.Text), loc.id);
-                        db.Things.Add(thing);
-                        db.SaveChanges();
-                        break;
-                    }
-                }
-
-                List<Thing> things = db.Things.ToList();
-                foreach (Grid item in select_tags.Children)
-                {
-                    var borders = item.Children;
-                    Border border = (Border)borders[0];
-                    string tag_selected = (string)((Label)border.Child).Content;
-                    foreach (Tag tag in db.Tags.ToList())
-                    {
-                        if (tag.name == tag_selected)
+                        
+                        foreach (Location loc in locations)
                         {
-                            things.Last().Tags.Add(tag);
-                            db.SaveChanges();
-                            break;
+                            if (loc.name == ComboBox_location.Text)
+                            {
+                                Thing thing = new Thing(name.Text, number.Text, Convert.ToInt32(count_things.Text));
+                                if (ComboBox_employee.Text != "" && date.Text != "")
+                                {
+                                    string[] fio = ComboBox_employee.Text.Split(' ');
+                                    foreach (Employee item in employees)
+                                    {
+                                        if (item.surname == fio[0] && item.name == fio[1] && item.patronymic == fio[2])
+                                        {
+                                            item.Things.Add(thing);
+                                            thing.date = date.Text;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                db.Things.Add(thing);
+                                db.SaveChanges();
+                                break;
+                            }
+                        }
+
+                        List<Thing> things = db.Things.ToList();
+                        foreach (Grid item in select_tags.Children)
+                        {
+                            var borders = item.Children;
+                            Border border = (Border)borders[0];
+                            string tag_selected = (string)((Label)border.Child).Content;
+                            foreach (Tag tag in db.Tags.ToList())
+                            {
+                                if (tag.name == tag_selected)
+                                {
+                                    things.Last().Tags.Add(tag);
+                                    db.SaveChanges();
+                                    break;
+                                }
+                            }
+
                         }
                     }
+                    main_Page.Update_list(true,null);
+                    break;
 
-                }
+                case editBtn:
+                    editing_thing.name = name.Text;
+                    editing_thing.number = number.Text;
+                    editing_thing.count = Convert.ToInt32(count_things.Text);
+                    foreach (Location loc in locations)
+                    {
+                        if (loc.name == ComboBox_location.Text)
+                        {
+                            loc.Things.Add(editing_thing);
+                            if (ComboBox_employee.Text != "" && date.Text != "")
+                            {
+                                
+                                string[] fio = ComboBox_employee.Text.Split(' ');
+                                foreach (Employee item in employees)
+                                {
+                                    if (item.surname == fio[0] && item.name == fio[1] && item.patronymic == fio[2])
+                                    {
+                                        item.Things.Add(editing_thing);
+                                        db.Employees.Update(item);
+                                        editing_thing.date = date.Text;
+                                        break;
+                                    }
+                                }
 
-                //if (ComboBox_employee.Text != "" && date.Text != "")
-                //{
-                //    List<Employee> employees = db.Employees.ToList();
-                //    string[] fio = ComboBox_employee.Text.Split(' ');
-                //    foreach (Employee item in employees)
-                //    {
-                //        if (item.Surname == fio[0] && item.Name == fio[1] && item.Patronymic == fio[2])
-                //        {
-                //            Taken_thing taken = new Taken_thing(things.Last().id, item.id, date.Text);
-                //            db.Taken_Things.Add(taken);
-                //            db.SaveChanges();
-                //            break;
-                //        }
-                //    }
+                            }
+                            else
+                            {
+                                foreach (Employee emp in employees)
+                                {
+                                    foreach (Thing thing in emp.Things)
+                                    {
+                                        if(thing.id == editing_thing.id)
+                                        {
+                                            emp.Things.Remove(editing_thing);
+                                            break;
+                                        }    
+                                    }
+                                }
+                                editing_thing.date = null;
+                            }
+                        }
+                    }
+                    foreach (Grid item in select_tags.Children)
+                    {
+                        var borders = item.Children;
+                        Border border = (Border)borders[0];
+                        string tag_selected = (string)((Label)border.Child).Content;
+                        foreach (Tag tag in db.Tags.ToList())
+                        {
+                            if (tag.name == tag_selected)
+                            {
+                                bool present = false;
+                                foreach (Tag t in editing_thing.Tags)
+                                {
+                                    if(tag.id == t.id)
+                                    {
+                                        present = true;
+                                        break;
+                                    }         
+                                }
+                                if(!present)
+                                    editing_thing.Tags.Add(tag);
+                                break;
+                            }
+                        }
 
-                //}
+                    }
+                    db.SaveChanges();
+                    main_Page.Update_thing(editing_grid,editing_thing);
+                    break;
             }
         }
     }

@@ -11,7 +11,7 @@ namespace thing_list
         public int id { get; set; }
         public string name { get; set; }
         public List<Thing> Things { get; set; } = new();
-        //public List<Tag_thing> Tag_Things { get; set; } = new();
+
 
         public Tag() { }
 

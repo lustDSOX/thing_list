@@ -106,6 +106,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="LabelStyle2.2" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="#3958FC"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="#606060" BorderThickness="0 0 1 1" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="LabelStyle3" TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="#fff"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -149,7 +169,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <Grid>
+    <Grid x:Name="mouse">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="1.5*"/>
@@ -171,9 +191,31 @@
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}"/>
-        <Button Grid.Column="1" Grid.Row="3" Content="сортировать по" Style="{DynamicResource ButtonStyle1}" />
-        <Button Grid.Column="1" Grid.Row="5" Content="искать в" Style="{DynamicResource ButtonStyle1}"/>
+        <TextBox KeyDown="TextBox_KeyDown" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
+        <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" Content="очистить" Padding="10 0" Style="{DynamicResource ButtonStyle1}" Margin="10 0" Foreground="White" Background="#3958FC" Click="Button_Click_1"/>
+        <Button Grid.Column="2" Grid.Row="3" Click="Switch_sort" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle1}" Margin="5 0">
+            <Image x:Name="sort_method" Source="arrow_back.png">
+                <Image.LayoutTransform>
+                    <RotateTransform Angle="270"/>
+                </Image.LayoutTransform>
+            </Image>
+        </Button>
+        <Button Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" Content="применить" Style="{DynamicResource ButtonStyle1}" Background="#3958FC" Foreground="White" Padding="10 0"/>
+        <Label x:Name="sort_sel" Grid.Column="1" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White" Padding="0 10 0 0" />
+        <ComboBox x:Name="sort" SelectionChanged="ComboBox_SelectionChanged" Text="сортироватть по" Grid.Row="3" Grid.Column="1" IsEditable="True" Style="{DynamicResource ComboBoxStyle1}" IsReadOnly="True" Template="{DynamicResource ComboBoxEditableTemplate2}">
+            <Label Foreground = "White">наименование</Label>
+            <Label Foreground = "White">номер</Label>
+            <Label Foreground = "White">количество</Label>
+            <Label Foreground = "White">расположение</Label>
+            <Label Foreground = "White">сначала занятые/свободные</Label>
+        </ComboBox>
+        <Label x:Name="search_sel" Grid.Column="1" Grid.Row="4" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White"  Padding="0 10 0 0" />
+        <ComboBox x:Name="search" SelectionChanged="ComboBox_SelectionChanged" Text="искать в" Grid.Row="5" Grid.Column="1" IsEditable="True" Style="{DynamicResource ComboBoxStyle1}" IsReadOnly="True" Template="{DynamicResource ComboBoxEditableTemplate2}">
+            <Label Foreground = "White">наименование</Label>
+            <Label Foreground = "White">номер</Label>
+            <Label Foreground = "White">количество</Label>
+            <Label Foreground = "White">расположение</Label>
+        </ComboBox>
         <Button Grid.Column="4" Grid.Row="3" Margin="0 20" Grid.RowSpan="3" Style="{DynamicResource ButtonStyle1}" Background="#3958FC" Content="Добавить запись" Foreground="White" Click="Button_Click" />
 
         <Grid Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="7">
@@ -189,26 +231,11 @@
             <Label Grid.Column="1" Content="номер" Style="{DynamicResource LabelStyle3}"/>
             <Label Grid.Column="2" Content="кол" Style="{DynamicResource LabelStyle3}"/>
             <Label Grid.Column="3" Content="расположение" Style="{DynamicResource LabelStyle3}"/>
-            <Label Grid.Column="4" Content="категори" Style="{DynamicResource LabelStyle4}"/>
+            <Label Grid.Column="4" Content="категории" Style="{DynamicResource LabelStyle4}"/>
         </Grid>
-        <Border BorderBrush="#3F3F3F" BorderThickness="1" Background="#262626" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="8" CornerRadius="0 0 5 5">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" >
-                <StackPanel x:Name="list">
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0.5*"/>
-                            <ColumnDefinition Width="0.1*"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0.8*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0" Content="наименование + обозначение" Style="{DynamicResource LabelStyle2}" />
-                        <Label Grid.Column="1" Content="номер" Style="{DynamicResource LabelStyle2}"/>
-                        <Label Grid.Column="2" Content="кол" Style="{DynamicResource LabelStyle2}"/>
-                        <Label Grid.Column="3" Content="расположение" Style="{DynamicResource LabelStyle2}"/>
-                        <Label Grid.Column="4" Content="категори" Style="{DynamicResource LabelStyle2}"/>
-                    </Grid>
+        <Border BorderBrush="#3F3F3F" BorderThickness="1"  Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="8" CornerRadius="0 0 5 5">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel x:Name="list" Background="#262626">
                 </StackPanel>
             </ScrollViewer>
         </Border>

@@ -436,11 +436,8 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Style="{DynamicResource ButtonStyle1}" Background="Transparent" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Click="ExitButton_Click">
-                <Image Source="arrow.png" Stretch="Uniform"/>
-                <Button.RenderTransform>
-                    <RotateTransform Angle="90"/>
-                </Button.RenderTransform>
+            <Button Style="{DynamicResource ButtonStyle1}" Background="Transparent" Grid.Row="1" HorizontalAlignment="Left" Grid.Column="1" Click="ExitButton_Click">
+                <Image Source="arrow_back.png" Stretch="Uniform"/>
             </Button>
         </Grid>
 

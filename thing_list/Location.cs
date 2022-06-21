@@ -11,7 +11,7 @@ namespace thing_list
         public int id { get; set; }
         public string name { get; set; }
 
-        public Location() { }
+        public List<Thing> Things { get; set; } = new ();
 
         public Location(string name)
         {

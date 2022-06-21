@@ -73,6 +73,16 @@ namespace thing_list.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] arrow_back {
+            get {
+                object obj = ResourceManager.GetObject("arrow_back", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] icon_calendar {
             get {
                 object obj = ResourceManager.GetObject("icon_calendar", resourceCulture);

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="arrow.png" />
+    <None Remove="arrow_back.png" />
     <None Remove="icon_calendar.png" />
   </ItemGroup>
 
@@ -19,6 +20,9 @@
 
   <ItemGroup>
     <Resource Include="arrow.png" />
+    <Resource Include="arrow_back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="icon_calendar.png" />
   </ItemGroup>
 

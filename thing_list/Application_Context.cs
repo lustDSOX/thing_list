@@ -18,8 +18,5 @@ namespace thing_list
         {
             optionsBuilder.UseSqlite("Data Source=../../../db.db");
         }
-
-       
-
     }
 }
