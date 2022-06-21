@@ -200,13 +200,13 @@
                 </Image.LayoutTransform>
             </Image>
         </Button>
-        <Button Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" Content="применить" Style="{DynamicResource ButtonStyle1}" Background="#3958FC" Foreground="White" Padding="10 0"/>
+        <Button Grid.Column="2" Click="Sort" Grid.Row="3" HorizontalAlignment="Center" Content="применить" Style="{DynamicResource ButtonStyle1}" Background="#3958FC" Foreground="White" Padding="10 0"/>
         <Label x:Name="sort_sel" Grid.Column="1" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White" Padding="0 10 0 0" />
         <ComboBox x:Name="sort" SelectionChanged="ComboBox_SelectionChanged" Text="сортироватть по" Grid.Row="3" Grid.Column="1" IsEditable="True" Style="{DynamicResource ComboBoxStyle1}" IsReadOnly="True" Template="{DynamicResource ComboBoxEditableTemplate2}">
             <Label Foreground = "White">наименование</Label>
             <Label Foreground = "White">номер</Label>
-            <Label Foreground = "White">количество</Label>
             <Label Foreground = "White">расположение</Label>
+            <Label Foreground = "White">количество</Label>
             <Label Foreground = "White">сначала занятые/свободные</Label>
         </ComboBox>
         <Label x:Name="search_sel" Grid.Column="1" Grid.Row="4" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White"  Padding="0 10 0 0" />

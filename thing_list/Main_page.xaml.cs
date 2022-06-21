@@ -23,10 +23,11 @@ namespace thing_list
         Add_page add_Page;
         string def_search = "поиск";
         string sort_name = "sort";
-        const int searchFor_name = 0;
-        const int searchFor_number = 1;
-        const int searchFor_location = 3;
-        const int searchFor_count = 2;
+        const int for_name = 0;
+        const int for_number = 1;
+        const int for_count = 2;
+        const int for_location = 3;
+        const int for_freedom = 4;
         public Main_page(MainWindow _window1)
         {
             InitializeComponent();
@@ -271,7 +272,7 @@ namespace thing_list
                 List<Thing> things;
                 switch (search.SelectedIndex)
                 {
-                    case searchFor_name:
+                    case for_name:
                         things = db.Things.Where(t => t!.name == textBox.Text).ToList();
                         if (things.Count == 0)
                             MessageBox.Show("Ничего не найдено");
@@ -282,7 +283,7 @@ namespace thing_list
                         }
                         break;
 
-                    case searchFor_count:
+                    case for_count:
                         try
                         {
                             int count = Convert.ToInt32(textBox.Text);
@@ -298,7 +299,7 @@ namespace thing_list
                         catch { }
                         break;
 
-                    case searchFor_location:
+                    case for_location:
                         bool find = true;
                         foreach (Location location in db.Locations)
                         {
@@ -322,7 +323,7 @@ namespace thing_list
                             MessageBox.Show("Ничего не найдено");
                         break;
 
-                    case searchFor_number:
+                    case for_number:
                         things = db.Things.Where(t => t!.number == textBox.Text).ToList();
                         if (things.Count == 0)
                             MessageBox.Show("Ничего не найдено");
@@ -358,6 +359,89 @@ namespace thing_list
                 sort_method.LayoutTransform = rotate;
             }
 
+        }
+
+        private void Sort(object sender, RoutedEventArgs e)
+        {
+            RotateTransform s = (RotateTransform)sort_method.LayoutTransform;
+            List<Thing> things;
+            if (s.Angle == 270)
+            {
+                switch (sort.SelectedIndex)
+                {
+                    case for_count:
+                        things = db.Things.OrderByDescending(t => t.count).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_freedom:
+                        things = db.Things.OrderByDescending(t => t.date).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_location:
+                        things = new List<Thing>();
+                        foreach (Location location in db.Locations.OrderByDescending(l=>l.name))
+                        {
+                            foreach (Thing thing in location.Things)
+                            {
+                                things.Add(thing);
+                            }
+                        }
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_name:
+                        things = db.Things.OrderByDescending(t => t.name).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_number:
+                        things = db.Things.OrderByDescending(t => t.number).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                }
+            }
+
+            else
+            {
+                switch (sort.SelectedIndex)
+                {
+                    case for_count:
+                        things = db.Things.OrderBy(t => t.count).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_freedom:
+                        things = db.Things.OrderBy(t => t.date).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_location:
+                        things = new List<Thing>();
+                        foreach (Location location in db.Locations.OrderBy(l => l.name))
+                        {
+                            foreach (Thing thing in location.Things)
+                            {
+                                things.Add(thing);
+                            }
+                        }
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_name:
+                        things = db.Things.OrderBy(t => t.name).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                    case for_number:
+                        things = db.Things.OrderBy(t => t.number).ToList();
+                        list.Children.Clear();
+                        Update_list(false, things);
+                        break;
+                }
+            }
         }
     }
 }

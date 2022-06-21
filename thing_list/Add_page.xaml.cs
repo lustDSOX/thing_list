@@ -356,7 +356,7 @@ namespace thing_list
                 case addBtn:
                     if (name.Text != "" && ComboBox_location.Text != "" && number.Text != "" && count_things.Text != "0" && select_tags.Children.Count > 0)
                     {
-                        
+
                         foreach (Location loc in locations)
                         {
                             if (loc.name == ComboBox_location.Text)
@@ -400,80 +400,94 @@ namespace thing_list
 
                         }
                     }
-                    main_Page.Update_list(true,null);
+                    main_Page.Update_list(true, null);
                     break;
 
                 case editBtn:
                     editing_thing.name = name.Text;
                     editing_thing.number = number.Text;
                     editing_thing.count = Convert.ToInt32(count_things.Text);
+                    foreach (Location location in locations)
+                    {
+                        foreach (Thing thing in location.Things)
+                        {
+                            if (thing.id == editing_thing.id)
+                            {
+                                location.Things.Remove(thing);
+                                break;
+                            }
+                                
+                        }
+                    }
                     foreach (Location loc in locations)
                     {
                         if (loc.name == ComboBox_location.Text)
                         {
                             loc.Things.Add(editing_thing);
-                            if (ComboBox_employee.Text != "" && date.Text != "")
-                            {
-                                
-                                string[] fio = ComboBox_employee.Text.Split(' ');
-                                foreach (Employee item in employees)
-                                {
-                                    if (item.surname == fio[0] && item.name == fio[1] && item.patronymic == fio[2])
-                                    {
-                                        item.Things.Add(editing_thing);
-                                        db.Employees.Update(item);
-                                        editing_thing.date = date.Text;
-                                        break;
-                                    }
-                                }
-
-                            }
-                            else
-                            {
-                                foreach (Employee emp in employees)
-                                {
-                                    foreach (Thing thing in emp.Things)
-                                    {
-                                        if(thing.id == editing_thing.id)
-                                        {
-                                            emp.Things.Remove(editing_thing);
-                                            break;
-                                        }    
-                                    }
-                                }
-                                editing_thing.date = null;
-                            }
                         }
                     }
-                    foreach (Grid item in select_tags.Children)
-                    {
-                        var borders = item.Children;
-                        Border border = (Border)borders[0];
-                        string tag_selected = (string)((Label)border.Child).Content;
-                        foreach (Tag tag in db.Tags.ToList())
+                        if (ComboBox_employee.Text != "" && date.Text != "")
                         {
-                            if (tag.name == tag_selected)
+
+                            string[] fio = ComboBox_employee.Text.Split(' ');
+                            foreach (Employee item in employees)
                             {
-                                bool present = false;
-                                foreach (Tag t in editing_thing.Tags)
+                                if (item.surname == fio[0] && item.name == fio[1] && item.patronymic == fio[2])
                                 {
-                                    if(tag.id == t.id)
-                                    {
-                                        present = true;
-                                        break;
-                                    }         
+                                    item.Things.Add(editing_thing);
+                                    db.Employees.Update(item);
+                                    editing_thing.date = date.Text;
+                                    break;
                                 }
-                                if(!present)
-                                    editing_thing.Tags.Add(tag);
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (Employee emp in employees)
+                            {
+                                foreach (Thing thing in emp.Things)
+                                {
+                                    if (thing.id == editing_thing.id)
+                                    {
+                                        emp.Things.Remove(editing_thing);
+                                        break;
+                                    }
+                                }
+                            }
+                            editing_thing.date = null;
+                        }
+                    
+           
+            foreach (Grid item in select_tags.Children)
+            {
+                var borders = item.Children;
+                Border border = (Border)borders[0];
+                string tag_selected = (string)((Label)border.Child).Content;
+                foreach (Tag tag in db.Tags.ToList())
+                {
+                    if (tag.name == tag_selected)
+                    {
+                        bool present = false;
+                        foreach (Tag t in editing_thing.Tags)
+                        {
+                            if (tag.id == t.id)
+                            {
+                                present = true;
                                 break;
                             }
                         }
-
+                        if (!present)
+                            editing_thing.Tags.Add(tag);
+                        break;
                     }
-                    db.SaveChanges();
-                    main_Page.Update_thing(editing_grid,editing_thing);
-                    break;
+                }
+
             }
+            db.SaveChanges();
+            main_Page.Update_thing(editing_grid, editing_thing);
+            break;
         }
     }
+}
 }
