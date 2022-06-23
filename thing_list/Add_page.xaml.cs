@@ -80,7 +80,7 @@ namespace thing_list
             if (thing.date == null)
                 date.SelectedDate = DateTime.Now;
             else
-                date.Text = thing.date;
+                date.Text = thing.date.ToString();
 
             Add_btn.Content = "Изменить запись";
         }
@@ -488,6 +488,7 @@ namespace thing_list
             main_Page.Update_thing(editing_grid, editing_thing);
             break;
         }
+            save_img.Visibility = Visibility.Visible;
     }
 }
 }

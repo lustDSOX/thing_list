@@ -83,6 +83,7 @@ namespace thing_list
                         {
                             case 0:
                                 label.Content = thing.name;
+                                label.HorizontalContentAlignment = HorizontalAlignment.Center;
                                 break;
                             case 1:
                                 label.Content = thing.number;
@@ -148,6 +149,7 @@ namespace thing_list
                     {
                         case 0:
                             label.Content = thing.name;
+                            label.HorizontalContentAlignment = HorizontalAlignment.Center;
                             break;
                         case 1:
                             label.Content = thing.number;
@@ -210,8 +212,10 @@ namespace thing_list
                 foreach (Thing t in location.Things)
                 {
                     if (t.id == thing.id)
+                    {
                         ((Label)grid.Children[3]).Content = location.name;
-                    break;
+                        break;
+                    }
                 }
             }
             ((Label)grid.Children[4]).Content = "";

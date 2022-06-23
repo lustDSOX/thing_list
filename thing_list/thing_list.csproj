@@ -11,6 +11,7 @@
     <None Remove="arrow.png" />
     <None Remove="arrow_back.png" />
     <None Remove="icon_calendar.png" />
+    <None Remove="save.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="icon_calendar.png" />
+    <Resource Include="save.png" />
   </ItemGroup>
 
   <ItemGroup>

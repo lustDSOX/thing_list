@@ -23,6 +23,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4B69FC"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="White"/>
@@ -206,68 +211,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
-            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.05*"/>
-                </Grid.ColumnDefinitions>
-                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                    <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
-                        <Border x:Name="dropDownBorder" BorderBrush="#606060" CornerRadius="3" BorderThickness="1" Background="#262626">
-                            <ScrollViewer x:Name="DropDownScrollViewer">
-                                <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled" >
-                                    <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
-                                    </Canvas>
-                                    <StackPanel Grid.ColumnSpan="2">
-                                        <Button x:Name="add_locBtn" Margin="0 5 0 0" Style="{DynamicResource ButtonStyle1}" Foreground="white" Click="Open_Add_0_Page" Background="#3958FC" HorizontalContentAlignment="Center" Content="+"></Button>
-                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </ScrollViewer>
-                        </Border>
-                    </Themes:SystemDropShadowChrome>
-                </Popup>
-                <ToggleButton x:Name="toggleButton" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle1}">
-                    <Image Source="arrow.png" Stretch="Uniform"/>
-                </ToggleButton>
-                <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" BorderThickness="1 1 0 1" CornerRadius="5 0 0 5" BorderBrush="#606060">
-                    <TextBox x:Name="PART_EditableTextBox" Foreground="White" FontSize="16" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="Center"/>
-                </Border>
-            </Grid>
-        </ControlTemplate>
-        <ControlTemplate x:Key="ComboBoxEditableTemplate2" TargetType="{x:Type ComboBox}">
-            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.1*"/>
-                </Grid.ColumnDefinitions>
-                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                    <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
-                        <Border x:Name="dropDownBorder" BorderBrush="#606060" CornerRadius="3" BorderThickness="1" Background="#262626">
-                            <ScrollViewer x:Name="DropDownScrollViewer">
-                                <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled" >
-                                    <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
-                                    </Canvas>
-                                    <StackPanel Grid.ColumnSpan="2">
-                                        <Button x:Name="add_tagBtn" Margin="0 5 0 0" Style="{DynamicResource ButtonStyle1}" Foreground="white" Click="Open_Add_0_Page" Background="#3958FC" HorizontalContentAlignment="Center" Content="+"></Button>
-                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </ScrollViewer>
-                        </Border>
-                    </Themes:SystemDropShadowChrome>
-                </Popup>
-                <ToggleButton x:Name="toggleButton" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle1}">
-                    <Image Source="arrow.png" Stretch="Uniform"/>
-                </ToggleButton>
-                <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" BorderThickness="1 1 0 1" CornerRadius="5 0 0 5" BorderBrush="#606060">
-                    <TextBox x:Name="PART_EditableTextBox" Foreground="White" FontSize="16" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="Center"/>
-                </Border>
-            </Grid>
-        </ControlTemplate>
         <Style x:Key="ComboBoxStyle1" TargetType="{x:Type ComboBox}">
             <Setter Property="Background" Value="#262626"/>
             <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
@@ -283,7 +226,7 @@
                 <Trigger Property="IsEditable" Value="true">
                     <Setter Property="IsTabStop" Value="false"/>
                     <Setter Property="Padding" Value="2"/>
-                    <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
+                    <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate2}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -381,37 +324,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <ControlTemplate x:Key="ComboBoxControlTemplate1" TargetType="{x:Type ComboBox}">
-            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.05*"/>
-                </Grid.ColumnDefinitions>
-                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                    <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
-                        <Border x:Name="dropDownBorder" BorderBrush="#606060" CornerRadius="3" BorderThickness="1" Background="#262626">
-                            <ScrollViewer x:Name="DropDownScrollViewer">
-                                <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled" >
-                                    <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
-                                    </Canvas>
-                                    <StackPanel Grid.ColumnSpan="2">
-                                        <Button x:Name="add_emplBtn" Margin="0 5 0 0" Style="{DynamicResource ButtonStyle1}" Foreground="white" Click="Open_Add_0_Page" Background="#3958FC" HorizontalContentAlignment="Center" Content="+"/>
-                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </ScrollViewer>
-                        </Border>
-                    </Themes:SystemDropShadowChrome>
-                </Popup>
-                <ToggleButton x:Name="toggleButton" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle1}">
-                    <Image Source="arrow.png" Stretch="Uniform"/>
-                </ToggleButton>
-                <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" BorderThickness="1 1 0 1" CornerRadius="5 0 0 5" BorderBrush="#606060">
-                    <TextBox x:Name="PART_EditableTextBox" Foreground="White" FontSize="16" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="Center"/>
-                </Border>
-            </Grid>
-        </ControlTemplate>
     </Page.Resources>
     
     <Grid>
@@ -462,9 +374,9 @@
             <Label Grid.Column="1" Grid.Row="6" Content="кому" Style="{DynamicResource LabelStyle1}"/>
 
             <TextBox x:Name="name" Grid.Column="1" Grid.Row="1" Style="{DynamicResource TextBoxStyle1}"/>
-            <ComboBox x:Name="ComboBox_location" Grid.Row="4" Grid.Column="1"  IsEditable="True" IsReadOnly="False" Template="{DynamicResource ComboBoxEditableTemplate}">
+            <ComboBox x:Name="ComboBox_location" Grid.Row="4" Grid.Column="1"  IsEditable="True" IsReadOnly="False" Template="{DynamicResource ComboBoxEditableTemplate2}">
             </ComboBox>
-            <ComboBox x:Name="ComboBox_employee" Grid.Row="7" Grid.Column="1"  IsEditable="True" IsReadOnly="False" Template="{DynamicResource ComboBoxControlTemplate1}">
+            <ComboBox x:Name="ComboBox_employee" Grid.Row="7" Grid.Column="1"  IsEditable="True" IsReadOnly="False" Template="{DynamicResource ComboBoxEditableTemplate2}">
             </ComboBox>
         </Grid>
 
@@ -488,8 +400,7 @@
             <Label Content="номер" Style="{DynamicResource LabelStyle1}"/>
             <Label Grid.Row="3" Content="количество" Style="{DynamicResource LabelStyle1}"/>
             <Label Grid.Row="3" Grid.Column="2" Content="категории" Style="{DynamicResource LabelStyle1}"/>
-            <Label Grid.Row="6" Content="дата" Style="{DynamicResource LabelStyle1}"/>
-
+           
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -513,9 +424,9 @@
 
             </Grid>
             <TextBox x:Name="number" Grid.Row="1" Grid.ColumnSpan="3" Style="{DynamicResource TextBoxStyle1}"/>
-            <ComboBox x:Name="ComboBox_tags" Grid.Row="4" Grid.Column="2" IsEditable="True" Style="{DynamicResource ComboBoxStyle1}" KeyUp="ComboBox_KeyUp" IsReadOnly="False" Template="{DynamicResource ComboBoxEditableTemplate2}">
+            <ComboBox Style="{DynamicResource ComboBoxStyle1}" x:Name="ComboBox_tags" Grid.Row="4" Grid.Column="2" IsEditable="True" KeyUp="ComboBox_KeyUp" IsReadOnly="False" >
             </ComboBox>
-            <Grid x:Name="select_tags" Grid.Column="2" Grid.Row="5" Grid.RowSpan="3">
+            <Grid x:Name="select_tags" Grid.Column="2" Grid.Row="5" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="0.1*"/>
@@ -526,15 +437,28 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.1*"/>
                     <RowDefinition/>
-                    <RowDefinition Height="0.1*"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="0.1*"/>
-                    <RowDefinition/>
                     <RowDefinition Height="0.2*"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
             </Grid>
-            <DatePicker x:Name="date" Grid.Row="7" Style="{DynamicResource DatePickerStyle1}"  />
+            <Grid Grid.Row="6" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Content="дата" Style="{DynamicResource LabelStyle1}"/>
+                <Label Grid.Column="2" Content="кол-во взятых" Style="{DynamicResource LabelStyle1}"/>
+                <DatePicker x:Name="date" Grid.Row="1" Style="{DynamicResource DatePickerStyle1}" />
+                <TextBox x:Name="count_take" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Style="{DynamicResource TextBoxStyle1}"/>
+            </Grid>
+            
+            <Label Grid.Column="2" Grid.Row="6" Style="{DynamicResource LabelStyle1}" Content="комментарий"/>
+            <TextBox x:Name="comment" Grid.Column="2" Grid.Row="7" Style="{DynamicResource TextBoxStyle1}"/>
         </Grid>
 
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
@@ -549,6 +473,7 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Button x:Name="Add_btn" Grid.Column="1" Grid.Row="1" Content="Добавить запись" Style="{DynamicResource ButtonStyle1}" Click="Add_btn_Click"/>
+            <Image x:Name="save_img" Source="save.png" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Visibility="Hidden"/>
         </Grid>
     </Grid>
 </Page>
