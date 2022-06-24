@@ -10,9 +10,10 @@ namespace thing_list
     {
         public int id { get; set; }
         public string name { get; set; }
+        //public string comment { get; set; }
         public string number { get; set; }
         public int count { get; set; }
-        public string? date { get; set; }
+        public DateTime? date { get; set; }
         public List<Tag> Tags { get; set; } = new();
 
         public Thing(string name, string number, int count)
