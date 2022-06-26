@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:thing_list"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">
+        Title="MainWindow" MinWidth="800" MinHeight="800" WindowState="Maximized">
     <Grid>
         <Frame x:Name="frame" NavigationUIVisibility="Hidden"/>
     </Grid>

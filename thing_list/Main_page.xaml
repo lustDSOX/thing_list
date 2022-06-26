@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:thing_list"
+      xmlns:local="clr-namespace:thing_list" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Main_page" Background="#0D0D0D">
@@ -231,7 +231,7 @@
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
             <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="RowHeaderWidth" Value="0" />
             <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
             <Setter Property="Template">
@@ -255,7 +255,7 @@
                                             <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                                             <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                                             <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
-                                            <ScrollBar Background="Transparent" BorderThickness="0" x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                            <ScrollBar Style="{DynamicResource ResourceKey=ScrollStyle}" x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                                             <Grid Grid.Column="1" Grid.Row="2">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
@@ -282,13 +282,41 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle Fill="#747474" RadiusY="5" RadiusX="10"></Rectangle>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Track Name="PART_Track"
+                   IsDirectionReversed="True">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumbStyle}">
+                        </Thumb>
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="ScrollStyle" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>
+        </Style>
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
@@ -297,40 +325,14 @@
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.3*"/>
             <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-
-        <TextBox Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
-        <Button Grid.Column="2" Grid.Row="3" Click="Switch_sort" HorizontalAlignment="Left"   Margin="5 0" Style="{DynamicResource ButtonStyle4}">
-            <Image x:Name="sort_method" Source="arrow_back.png">
-                <Image.LayoutTransform>
-                    <RotateTransform Angle="270"/>
-                </Image.LayoutTransform>
-            </Image>
-        </Button>
-        <Button Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" Content="применить" Style="{DynamicResource ButtonStyle1}" Foreground="White" Padding="10 0"/>
-        <Label x:Name="sort_sel" Grid.Column="1" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White" Padding="0 10 0 0" />
-        <ComboBox x:Name="sort" SelectionChanged="ComboBox_SelectionChanged" Text="сортироватть по" Grid.Row="3" Grid.Column="1" IsEditable="True" IsReadOnly="True" Template="{DynamicResource ComboBoxEditableTemplate2}">
-            <Label Foreground = "White">наименование</Label>
-            <Label Foreground = "White">номер</Label>
-            <Label Foreground = "White">количество</Label>
-            <Label Foreground = "White">расположение</Label>
-            <Label Foreground = "White">сначала занятые/свободные</Label>
-        </ComboBox>
-        <Label x:Name="search_sel" Grid.Column="1" Grid.Row="4" FontSize="10" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Foreground="White"  Padding="0 10 0 0" />
-        <ComboBox x:Name="search" SelectionChanged="ComboBox_SelectionChanged" Text="искать в" Grid.Row="5" Grid.Column="1" IsEditable="True" IsReadOnly="True" Template="{DynamicResource ComboBoxEditableTemplate2}">
-            <Label Foreground = "White">наименование</Label>
-            <Label Foreground = "White">номер</Label>
-            <Label Foreground = "White">количество</Label>
-            <Label Foreground = "White">расположение</Label>
-        </ComboBox>
-        <Button Grid.Column="4" Grid.Row="3" Margin="0 20" Grid.RowSpan="3" Content="Добавить запись" Foreground="White" Click="Button_Click" Style="{DynamicResource ButtonStyle1}" />
-        <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserSortColumns="False" x:Name="list" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+        <Grid Grid.Column="3" MinWidth="0" MaxWidth="300"/>
+        <TextBox x:Name="search" Grid.Column="1" TextChanged="TextBox_TextChanged" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
+        <Button  Grid.Column="4" HorizontalAlignment="Right" Padding="50 0" Grid.Row="1" Content="Добавить запись" Foreground="White" Click="Button_Click" Style="{DynamicResource ButtonStyle1}" />
+        <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserSortColumns="True" x:Name="list" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*">
                     <DataGridTextColumn.HeaderStyle>
@@ -362,7 +364,7 @@
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
                             <Setter Property="BorderBrush" Value="White"/>
-                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderThickness" Value="0 2 2 2"/>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
@@ -373,7 +375,7 @@
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
                             <Setter Property="BorderBrush" Value="White"/>
-                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderThickness" Value="0 2 2 2"/>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
@@ -384,7 +386,7 @@
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
                             <Setter Property="BorderBrush" Value="White"/>
-                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderThickness" Value="0 2 2 2"/>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
@@ -395,7 +397,7 @@
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
                             <Setter Property="BorderBrush" Value="White"/>
-                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderThickness" Value="0 2 2 2"/>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
@@ -425,7 +427,6 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
-
         </DataGrid>
     </Grid>
 </Page>

@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace thing_list
 {
@@ -14,20 +18,16 @@ namespace thing_list
         Application_Context db;
         Add_page add_Page;
         string def_search = "поиск";
-        string sort_name = "sort";
-        const int for_name = 0;
-        const int for_number = 1;
-        const int for_count = 2;
-        const int for_location = 3;
-        const int for_freedom = 4;
+        List<Data_thing> things = new List<Data_thing>();
+        List<Data_thing> lower_things = new List<Data_thing>();
         public Main_page(MainWindow _window1)
         {
             InitializeComponent();
             window1 = _window1;
             db = new Application_Context();
             Update_addPage();
-            List<Data_thing> things = new List<Data_thing>();
 
+            
             foreach (Location location in db.Locations.Include(l => l.Things).ToList())
             {
                 foreach (Thing thing in location.Things)
@@ -58,6 +58,7 @@ namespace thing_list
                 }
             }
             list.ItemsSource = things;
+
         }
 
       
@@ -100,34 +101,6 @@ namespace thing_list
                 box.Text = def_search;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox comboBox = sender as ComboBox;
-            if (comboBox.Name == sort_name)
-                sort_sel.Content = "cортировать по";
-            else
-                search_sel.Content = "искать в";
-
-        }
-
-        private void Switch_sort(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            RotateTransform s = (RotateTransform)sort_method.LayoutTransform;
-            if (s.Angle == 270)
-            {
-                RotateTransform rotate = new RotateTransform(90);
-                sort_method.LayoutTransform = rotate;
-            }
-
-            else
-            {
-                RotateTransform rotate = new RotateTransform(270);
-                sort_method.LayoutTransform = rotate;
-            }
-
-        }
-
         private void list_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             Data_thing thing =  (Data_thing)e.Row.DataContext;
@@ -136,87 +109,21 @@ namespace thing_list
                 e.Row.Foreground = new SolidColorBrush(Colors.Blue);
         }
 
-        //private void Sort(object sender, RoutedEventArgs e)
-        //{
-        //    RotateTransform s = (RotateTransform)sort_method.LayoutTransform;
-        //    List<Thing> things;
-        //    if (s.Angle == 270)
-        //    {
-        //        switch (sort.SelectedIndex)
-        //        {
-        //            case for_count:
-        //                things = db.Things.OrderByDescending(t => t.count).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_freedom:
-        //                things = db.Things.OrderByDescending(t => t.date).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_location:
-        //                things = new List<Thing>();
-        //                foreach (Location location in db.Locations.OrderByDescending(l=>l.name))
-        //                {
-        //                    foreach (Thing thing in location.Things)
-        //                    {
-        //                        things.Add(thing);
-        //                    }
-        //                }
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_name:
-        //                things = db.Things.OrderByDescending(t => t.name).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_number:
-        //                things = db.Things.OrderByDescending(t => t.number).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //        }
-        //    }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(list != null)
+            {
 
-        //    else
-        //    {
-        //        switch (sort.SelectedIndex)
-        //        {
-        //            case for_count:
-        //                things = db.Things.OrderBy(t => t.count).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_freedom:
-        //                things = db.Things.OrderBy(t => t.date).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_location:
-        //                things = new List<Thing>();
-        //                foreach (Location location in db.Locations.OrderBy(l => l.name))
-        //                {
-        //                    foreach (Thing thing in location.Things)
-        //                    {
-        //                        things.Add(thing);
-        //                    }
-        //                }
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_name:
-        //                things = db.Things.OrderBy(t => t.name).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //            case for_number:
-        //                things = db.Things.OrderBy(t => t.number).ToList();
-        //                list.Children.Clear();
-        //                Update_list(false, things);
-        //                break;
-        //        }
-        //    }
-        //}
+                var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
+                var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
+                var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
+                var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
+                var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));
+
+                var new_list = filter_name.Concat(filter_number).Concat(filter_location).Concat(filter_tag).Concat(filter_count);
+                list.ItemsSource = new_list;
+            }
+            
+        }
     }
 }
