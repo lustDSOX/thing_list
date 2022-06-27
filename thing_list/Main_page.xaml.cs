@@ -68,7 +68,6 @@ namespace thing_list
             add_Page = new Add_page(window1, db, this);
             add_Page.Update_ListTags(false);
             add_Page.Update_ListLocations(false);
-            add_Page.Update_ListEmployees(false);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

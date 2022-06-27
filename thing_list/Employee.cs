@@ -14,7 +14,7 @@ namespace thing_list
         public string patronymic { get; set; }
 
         public List<Thing> Things{ get; set; } = new();
-
+        public List<Taken_things> Taken_Things { get; set; } = new();
         public Employee() { }
 
         public Employee(string surname, string name, string patronymic)

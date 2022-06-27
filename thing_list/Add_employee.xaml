@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:thing_list"
         mc:Ignorable="d"
-        Title="Add_employee" Height="450" Width="800" Background="#0D0D0D" WindowStyle="None">
+        Title="Add_employee" MinHeight="350" MinWidth="600" Height="450" Width="800" Background="#0D0D0D" WindowStyle="SingleBorderWindow" >
     <Window.Resources>
         <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="#262626"/>
@@ -56,6 +56,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+    <Border BorderBrush="White" BorderThickness="1">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -88,4 +89,5 @@
         </Grid>
         
     </Grid>
+    </Border>
 </Window>

@@ -321,17 +321,16 @@
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="7*"/>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Column="3" MinWidth="0" MaxWidth="300"/>
         <TextBox x:Name="search" Grid.Column="1" TextChanged="TextBox_TextChanged" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
         <Button  Grid.Column="4" HorizontalAlignment="Right" Padding="50 0" Grid.Row="1" Content="Добавить запись" Foreground="White" Click="Button_Click" Style="{DynamicResource ButtonStyle1}" />
-        <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserSortColumns="True" x:Name="list" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+        <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserSortColumns="True" x:Name="list" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"  AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*">
@@ -359,7 +358,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="номер" Binding="{Binding Number}" Width="*">
+                <DataGridTextColumn Header="номер" Binding="{Binding Number}" Width="0.5*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -370,7 +369,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="кол-во" Binding="{Binding Count}" Width="0.2*">
+                <DataGridTextColumn Header="кол-во" Binding="{Binding Count}" Width="0.1*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -381,7 +380,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="расположение" Binding="{Binding Location}" Width="*">
+                <DataGridTextColumn Header="расположение" Binding="{Binding Location}" Width="0.8*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>

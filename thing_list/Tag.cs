@@ -12,7 +12,6 @@ namespace thing_list
         public string name { get; set; }
         public List<Thing> Things { get; set; } = new();
 
-
         public Tag() { }
 
         public Tag(string name)

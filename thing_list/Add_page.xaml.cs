@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace thing_list
 {
@@ -15,7 +16,6 @@ namespace thing_list
         public MainWindow window1;
         Main_page main_Page;
         public int tag_col = 0;
-        public int tag_row = 1;
         public Data_thing editing_item;
         public Thing editing_thing;
         const string tagBtn_name = "add_tagBtn";
@@ -36,14 +36,12 @@ namespace thing_list
         {
             name.Clear();
             number.Clear();
-            ComboBox_employee.Text = "";
             ComboBox_location.Text = "";
             count_things.Text = "0";
-            date.Text = "";
             select_tags.Children.RemoveRange(0, select_tags.Children.Count);
             Add_btn.Content = "Добавить запись";
             tag_col = 0;
-            tag_row = 1;
+
         }
         public void Edit_thing(Thing thing, Data_thing item_list)
         {
@@ -67,21 +65,7 @@ namespace thing_list
             {
                 Add_selected_tag(tag.name);
             }
-            foreach (Employee employee in db.Employees)
-            {
-                foreach (Thing thing_emp in employee.Things)
-                {
-                    if (thing_emp.id == thing.id)
-                        ComboBox_employee.Text = $"{employee.name} {employee.surname} {employee.patronymic}";
-                }
-
-            }
-
-            if (thing.date == null)
-                date.SelectedDate = DateTime.Now;
-            else
-                date.Text = thing.date.ToString();
-
+           
             Add_btn.Content = "Изменить запись";
         }
 
@@ -139,36 +123,9 @@ namespace thing_list
             }
         }
 
-        public void Update_ListEmployees(bool last)
-        {
-            List<Employee> employees = db.Employees.ToList();
-            if (!last)
-            {
-                foreach (Employee employee in employees)
-                {
-                    ComboBoxItem item = new ComboBoxItem();
-                    item.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#262626"));
-                    item.HorizontalContentAlignment = HorizontalAlignment.Center;
-                    item.Foreground = Brushes.White;
-                    item.Content = $"{employee.surname} {employee.name} {employee.patronymic}";
-                    ComboBox_employee.Items.Add(item);
-                }
-            }
-            else
-            {
-
-                ComboBoxItem item = new ComboBoxItem();
-                item.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#262626"));
-                item.HorizontalContentAlignment = HorizontalAlignment.Center;
-                item.Foreground = Brushes.White;
-                item.Content = $"{employees.Last().surname} {employees.Last().name} {employees.Last().patronymic}";
-                ComboBox_employee.Items.Add(item);
-            }
-        }
-
         private void ComboBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && tag_row < 9)
+            if (e.Key == Key.Enter && tag_col<6)
             {
                 try
                 {
@@ -207,13 +164,15 @@ namespace thing_list
                 columnDefinition0.Width = new GridLength(4, GridUnitType.Star);
                 grid.ColumnDefinitions.Add(columnDefinition0);
                 grid.ColumnDefinitions.Add(columnDefinition1);
-                grid.Name = $"grid{tag_row}_{tag_col}";
+                grid.Name = $"grid_{tag_col}";
 
                 Label label = new Label();
                 label.Foreground = Brushes.White;
                 label.Content = name_tag;
                 label.Background = Brushes.Transparent;
                 label.FontSize = 10;
+                label.VerticalContentAlignment = VerticalAlignment.Center;
+                label.Padding = new Thickness(0,0,5,0);
 
                 Button button = new Button();
                 button.Content = "×";
@@ -244,14 +203,8 @@ namespace thing_list
 
                 select_tags.Children.Add(grid);
                 Grid.SetColumn(grid, tag_col);
-                Grid.SetRow(grid, tag_row);
 
                 tag_col += 2;
-                if (tag_col > 4)
-                {
-                    tag_col = 0;
-                    tag_row += 2;
-                }
 
             }
             catch { }
@@ -272,19 +225,12 @@ namespace thing_list
                 }
             }
             tag_col = 0;
-            tag_row = 1;
 
             foreach (Grid item in select_tags.Children)
             {
 
                 Grid.SetColumn(item, tag_col);
-                Grid.SetRow(item, tag_row);
                 tag_col += 2;
-                if (tag_col > 4)
-                {
-                    tag_col = 0;
-                    tag_row += 2;
-                }
             }
         }
 
@@ -488,5 +434,21 @@ namespace thing_list
         //}
         //    save_img.Visibility = Visibility.Visible;
     }
-}
+
+        private void anim_list_Click(object sender, RoutedEventArgs e)
+        {
+            anim_list.Visibility = Visibility.Hidden;
+            DoubleAnimation dblAnim1 = new DoubleAnimation();
+            dblAnim1.From = 0.0;
+            dblAnim1.To = 1.0;
+            dblAnim1.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+
+            DoubleAnimation dblAnim2 = new DoubleAnimation();
+            dblAnim2.From = 0;
+            dblAnim2.To = 200;
+            dblAnim2.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            border_list.BeginAnimation(Border.HeightProperty, dblAnim2);
+            border_list.BeginAnimation(Border.OpacityProperty, dblAnim1);
+        }
+    }
 }

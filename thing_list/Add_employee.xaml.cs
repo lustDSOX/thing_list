@@ -60,7 +60,6 @@ namespace thing_list
                 Employee employee = new Employee(surname.Text, name.Text, patronymic.Text);
                 db.Employees.Add(employee);
                 db.SaveChanges();
-                add_Page.Update_ListEmployees(true);
                 Close();
             }
         }
