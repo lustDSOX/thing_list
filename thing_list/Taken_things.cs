@@ -14,5 +14,6 @@ namespace thing_list
         public Employee employee { get; set; }
         public DateTime? date { get; set; }
         public string comm { get; set; }
+        public Taken_things() { }
     }
 }

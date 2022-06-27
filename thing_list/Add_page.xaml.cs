@@ -65,9 +65,17 @@ namespace thing_list
             {
                 Add_selected_tag(tag.name);
             }
-           
+
+            if (thing.Taken_Things != null)
+                list_empl.ItemsSource = thing.Taken_Things;
+            else
+            {
+
+            }
+                
             Add_btn.Content = "Изменить запись";
         }
+
 
         public void Update_ListTags(bool last)
         {
@@ -434,21 +442,5 @@ namespace thing_list
         //}
         //    save_img.Visibility = Visibility.Visible;
     }
-
-        private void anim_list_Click(object sender, RoutedEventArgs e)
-        {
-            anim_list.Visibility = Visibility.Hidden;
-            DoubleAnimation dblAnim1 = new DoubleAnimation();
-            dblAnim1.From = 0.0;
-            dblAnim1.To = 1.0;
-            dblAnim1.Duration = new Duration(TimeSpan.FromMilliseconds(500));
-
-            DoubleAnimation dblAnim2 = new DoubleAnimation();
-            dblAnim2.From = 0;
-            dblAnim2.To = 200;
-            dblAnim2.Duration = new Duration(TimeSpan.FromMilliseconds(500));
-            border_list.BeginAnimation(Border.HeightProperty, dblAnim2);
-            border_list.BeginAnimation(Border.OpacityProperty, dblAnim1);
-        }
     }
 }
