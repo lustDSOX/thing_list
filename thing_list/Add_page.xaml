@@ -483,13 +483,12 @@
         </ControlTemplate>
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
             <Setter Property="Background" Value="#262626"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="#3F3F3F"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="white"/>
             <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
             <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="RowHeaderWidth" Value="0" />
             <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
@@ -573,11 +572,9 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="IsTodayHighlighted" Value="True"/>
             <Setter Property="SelectedDateFormat" Value="Short"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="BorderBrush" Value="#606060"/>
-            <Setter Property="BorderThickness" Value="0 0 1 0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DatePicker">
@@ -585,19 +582,17 @@
                             <Grid x:Name="PART_Root" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="0.4in"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Grid.Row="0" VerticalAlignment="Top">
+                                <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle4}" Background="Transparent" BorderThickness="0" Grid.Row="0" VerticalAlignment="Center">
                                     <Image Source="icon_calendar.png" Stretch ="Uniform" />
                                 </Button>
-                                <DatePickerTextBox x:Name="PART_TextBox" Background="#262626" BorderThickness="0" Grid.Column="0"  HorizontalContentAlignment="Left" Grid.Row="0" VerticalContentAlignment="Center"/>
+                                <DatePickerTextBox x:Name="PART_TextBox" Background="Transparent" Foreground="White" Style="{DynamicResource TextBoxStyle1}" BorderThickness="0" Grid.Column="0"  HorizontalContentAlignment="Left" Grid.Row="0" VerticalContentAlignment="Center"/>
                                 <Grid x:Name="PART_DisabledVisual" Grid.Column="0" Grid.ColumnSpan="2" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Rectangle Grid.Column="0" Fill="#A5FFFFFF" Grid.Row="0" RadiusX="1" RadiusY="1"/>
-                                    <Rectangle Grid.Column="1" Fill="#A5FFFFFF" Height="18" Margin="3,0,3,0" Grid.Row="0" RadiusX="1" RadiusY="1" Width="19"/>
                                     <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_TextBox}" StaysOpen="False"/>
                                 </Grid>
                             </Grid>
@@ -735,12 +730,21 @@
                 <RowDefinition Height="0.2*"/>
                 <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
-            <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserDeleteRows="True" CanUserSortColumns="True" RowBackground="Transparent" IsReadOnly="False" CanUserAddRows="True" x:Name="list_empl" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+            <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserDeleteRows="True" CanUserAddRows="True" CanUserSortColumns="True" x:Name="list" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+                <FrameworkElement.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>
+                </FrameworkElement.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="*">
-                        <DataGridTextColumn.HeaderStyle>
+                    <DataGridTemplateColumn Header="ФИО" Width="*" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox x:Name="ComboBox_employee"  Template="{DynamicResource ComboBoxTemplate}" IsEditable="True" IsReadOnly="False"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="IsEnabled" Value="False"/>
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
                                 <Setter Property="BorderThickness" Value="2"/>
@@ -761,88 +765,82 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-                        </DataGridTextColumn.HeaderStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="кол-во" Binding="{Binding Name}" Width="*">
-                        <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#0D0D0D"/>
-                                <Setter Property="BorderBrush" Value="White"/>
-                                <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGridColumnHeader">
-                                            <Border Background="#0D0D0D" BorderThickness="0">
-                                                <Border x:Name="border"
-                              BorderBrush="White"
-                              BorderThickness="2"
-                              Background="#0D0D0D"
-                              CornerRadius="0">
-                                                    <ContentPresenter HorizontalAlignment="Center"/>
-                                                </Border>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGridTextColumn.HeaderStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn Header="дата">
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Кол-во" Width="0.3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.2in"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Number}"/>
+                                    <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Button x:Name="plus" Click="Update_count" Grid.Row="0" Style="{DynamicResource ButtonStyle2}">
+                                                <Button.LayoutTransform>
+                                                    <RotateTransform Angle="180" />
+                                                </Button.LayoutTransform>
+                                            </Button>
+                                            <Button x:Name="minus" Click="Update_count" Grid.Row="1" Style="{DynamicResource ButtonStyle3}"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
-                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="BorderThickness" Value="0 2 2 2"/>
                                 <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGridColumnHeader">
-                                            <Border Background="#0D0D0D" BorderThickness="0">
-                                                <Border x:Name="border"
-                              BorderBrush="White"
-                              BorderThickness="2"
-                              Background="#0D0D0D"
-                              CornerRadius="0">
-                                                    <ContentPresenter HorizontalAlignment="Center"/>
-                                                </Border>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
-                        <DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Дата" Width="0.5*">
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <DatePicker SelectedDate="{Binding Date}" Style="{DynamicResource DatePickerStyle1}"/>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="комментарий" Binding="{Binding Name}" Width="*">
-                        <DataGridTextColumn.HeaderStyle>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
-                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="BorderThickness" Value="0 2 2 2"/>
                                 <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGridColumnHeader">
-                                            <Border Background="#0D0D0D" BorderThickness="0">
-                                                <Border x:Name="border"
-                              BorderBrush="White"
-                              BorderThickness="2"
-                              Background="#0D0D0D"
-                              CornerRadius="0 0 0 0">
-                                                    <ContentPresenter HorizontalAlignment="Center"/>
-                                                </Border>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
-                        </DataGridTextColumn.HeaderStyle>
-                    </DataGridTextColumn>
+                        </DataGridTemplateColumn.HeaderStyle>
+
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Комментарий" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Style="{DynamicResource TextBoxlistStyle}" Text="{Binding Location}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <TextBox Style="{DynamicResource TextBoxlistStyle}" Text="{Binding Location}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D0D0D"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0 2 2 2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn IsReadOnly="True" Width="0.1*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -869,11 +867,33 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Remove Row" Command="Delete"/>
+                                <Button Content="✖" Command="Delete" Background="Red" Style="{DynamicResource ButtonStyle4}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#919191"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
             </DataGrid>
             <Grid Grid.Column="1" Grid.Row="3">
                 <Grid.ColumnDefinitions>

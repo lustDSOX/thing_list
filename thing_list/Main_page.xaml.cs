@@ -33,9 +33,7 @@ namespace thing_list
                 foreach (Thing thing in location.Things)
                 {
                     Data_thing data_Thing = new Data_thing();
-                    data_Thing.Date = thing.date;
-                    //data_Thing.Comment = thing.comment;
-                   
+
                     data_Thing.id = thing.id;
                     data_Thing.Location = location.name;
                     data_Thing.Number = thing.number;
@@ -104,25 +102,28 @@ namespace thing_list
         {
             Data_thing thing =  (Data_thing)e.Row.DataContext;
             Thing sel_t = db.Things.Find(thing.id);
-            if (sel_t.date != null)
-                e.Row.Foreground = new SolidColorBrush(Colors.Blue);
+            //if (sel_t.date != null)
+            //    e.Row.Foreground = new SolidColorBrush(Colors.Blue);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(list != null)
+            if(search.Text != def_search && search.Text != "" && list != null)
             {
+                    var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
+                    var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
+                    var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
+                    var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
+                    var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));
 
-                var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
-                var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
-                var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
-                var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
-                var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));
-
-                var new_list = filter_name.Concat(filter_number).Concat(filter_location).Concat(filter_tag).Concat(filter_count);
-                list.ItemsSource = new_list;
+                    var new_list = filter_name.Concat(filter_number).Concat(filter_location).Concat(filter_tag).Concat(filter_count);
+                    list.ItemsSource = new_list;
             }
-            
+            else
+            {
+                if(list != null)
+                    list.ItemsSource = things;
+            }
         }
     }
 }

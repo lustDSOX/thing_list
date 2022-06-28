@@ -14,7 +14,5 @@ namespace thing_list
         public string Location { get; set; }
         public string Tag { get; set; }
         public int Count { get; set; }
-        public DateTime? Date { get; set; }
-        public string? Comment { get; set; } 
     }
 }

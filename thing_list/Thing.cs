@@ -12,7 +12,6 @@ namespace thing_list
         public string name { get; set; }
         public string number { get; set; }
         public int count { get; set; }
-        public DateTime? date { get; set; }
         public List<Tag> Tags { get; set; } = new();
         public List<Employee> Employees { get; set; } = new();
         public List<Taken_things> Taken_Things { get; set; } = new();
@@ -23,6 +22,6 @@ namespace thing_list
             this.number = number;
             this.count = count;           
         }
-
+        public Thing() { }
     }
 }
