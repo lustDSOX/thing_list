@@ -760,7 +760,7 @@
                 <RowDefinition Height="0.2*"/>
                 <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
-            <DataGrid x:Name="list" Style="{DynamicResource DataGridStyle1}" CanUserDeleteRows="True" CanUserAddRows="True" CanUserSortColumns="True" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+            <DataGrid x:Name="list" Style="{DynamicResource DataGridStyle1}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
                 <FrameworkElement.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
@@ -768,13 +768,30 @@
                 </FrameworkElement.Resources>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="ФИО" Width="*">
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.4in"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:AutoCompleteBox ItemsSource="{Binding Name, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
+                                    <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical">
-                                    <controls:AutoCompleteBox ItemsSource="{Binding Name}">
-                                        
-                                    </controls:AutoCompleteBox>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.4in"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:AutoCompleteBox ItemsSource="{Binding Name, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
+                                    <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
@@ -809,7 +826,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="0.2in"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Count}"/>
+                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Path=Count}"/>
                                     <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -838,9 +855,14 @@
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Дата" Width="0.3*">
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" Style="{DynamicResource DatePickerStyle1}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DatePicker SelectedDate="{Binding Date}" Style="{DynamicResource DatePickerStyle1}"/>
+                                <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" Style="{DynamicResource DatePickerStyle1}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>

@@ -38,7 +38,7 @@ namespace thing_list
                     j.Property(pt => pt.date).HasDefaultValueSql("CURRENT_TIMESTAMP");
                     j.Property(pt => pt.comm).HasDefaultValue(null);
                     j.HasKey(t => new { t.id_thing, t.id_employee });
-                    j.ToTable("Enrollments");
+                    j.ToTable("Taken_things");
                 });
         }
     }

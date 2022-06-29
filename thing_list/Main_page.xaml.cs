@@ -1,14 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace thing_list
 {
@@ -19,47 +15,83 @@ namespace thing_list
         Add_page add_Page;
         string def_search = "поиск";
         List<Data_thing> things = new List<Data_thing>();
-        List<Data_thing> lower_things = new List<Data_thing>();
         public Main_page(MainWindow _window1)
         {
             InitializeComponent();
             window1 = _window1;
             db = new Application_Context();
             Update_addPage();
+            Update_list(false);
+        }
 
-            
-            foreach (Location location in db.Locations.Include(l => l.Things).ToList())
+
+        public void Update_list(bool last)
+        {
+            if (!last)
             {
-                foreach (Thing thing in location.Things)
+                foreach (Thing thing in db.Things.Include(l => l.Tags))
                 {
                     Data_thing data_Thing = new Data_thing();
 
                     data_Thing.id = thing.id;
-                    data_Thing.Location = location.name;
+                    foreach (Location location in db.Locations)
+                    {
+                        if (location.Things.Where(t => t.id == thing.id).Count() != 0)
+                        {
+                            data_Thing.Location = location.name;
+                            break;
+                        }
+                    }
                     data_Thing.Number = thing.number;
                     data_Thing.Name = thing.name;
                     data_Thing.Count = thing.count;
 
                     string tags = "";
-                    foreach (Tag tag in db.Tags.Include(t => t.Things))
+                    int count = 1;
+                    foreach (Tag tag in thing.Tags)
                     {
-                        foreach (Thing t in tag.Things)
-                        {
-                            if (t.id == thing.id)
-                            {
-                                tags += tag.name + ";";
-                            }
-                        }
+                        if (count == thing.Tags.Count)
+                            tags += tag.name;
+                        else
+                            tags += tag.name + "; ";
+                        count++;
                     }
                     data_Thing.Tag = tags;
                     things.Add(data_Thing);
                 }
+
+                list.ItemsSource = things;
             }
-            list.ItemsSource = things;
-
+            else
+            {
+                Data_thing data_Thing = new Data_thing();
+                Thing thing = db.Things.OrderBy(t => t.id).Last();
+                data_Thing.id = thing.id;
+                data_Thing.Name = thing.name;
+                data_Thing.Number = thing.number;
+                data_Thing.Count = thing.count;
+                foreach (Location location in db.Locations)
+                {
+                    if (location.Things.Where(t => t.id == thing.id).Count() != 0)
+                    {
+                        data_Thing.Location = location.name;
+                        break;
+                    }
+                }
+                string tags = "";
+                int count = 1;
+                foreach (Tag tag in thing.Tags)
+                {
+                    if (count == thing.Tags.Count)
+                        tags += tag.name;
+                    else
+                        tags += tag.name + "; ";
+                }
+                data_Thing.Tag = tags;
+                things.Add(data_Thing);
+                list.Items.Refresh();
+            }
         }
-
-      
 
         private void Update_addPage()
         {
@@ -100,28 +132,28 @@ namespace thing_list
 
         private void list_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            Data_thing thing =  (Data_thing)e.Row.DataContext;
+            Data_thing thing = (Data_thing)e.Row.DataContext;
             Thing sel_t = db.Things.Find(thing.id);
-            //if (sel_t.date != null)
-            //    e.Row.Foreground = new SolidColorBrush(Colors.Blue);
+            if (sel_t.Employees.Count != 0)
+                e.Row.Foreground = new SolidColorBrush(Colors.Blue);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(search.Text != def_search && search.Text != "" && list != null)
+            if (search.Text != def_search && search.Text != "" && list != null)
             {
-                    var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
-                    var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
-                    var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
-                    var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
-                    var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));
+                var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
+                var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
+                var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
+                var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
+                var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));
 
-                    var new_list = filter_name.Concat(filter_number).Concat(filter_location).Concat(filter_tag).Concat(filter_count);
-                    list.ItemsSource = new_list;
+                var new_list = filter_name.Concat(filter_number).Concat(filter_location).Concat(filter_tag).Concat(filter_count);
+                list.ItemsSource = new_list;
             }
             else
             {
-                if(list != null)
+                if (list != null)
                     list.ItemsSource = things;
             }
         }

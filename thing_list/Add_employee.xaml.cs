@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static thing_list.Add_page;
 
 namespace thing_list
 {
@@ -60,6 +61,10 @@ namespace thing_list
                 Employee employee = new Employee(surname.Text, name.Text, patronymic.Text);
                 db.Employees.Add(employee);
                 db.SaveChanges();
+                add_Page.thing_s.Clear();
+                add_Page.thing_s.Add(new Thing_employees());
+                add_Page.list.ItemsSource = null;
+                add_Page.list.ItemsSource = add_Page.thing_s;
                 Close();
             }
         }
