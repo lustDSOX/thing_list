@@ -3,11 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:thing_list" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:controls='clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit'
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Add_page" Background="#0D0D0D"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
     <Page.Resources>
         <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#3958FC"/>
@@ -135,7 +135,7 @@
                     <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                 </Grid.ColumnDefinitions>
                 <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                    <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
+                    <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
                         <Border x:Name="dropDownBorder" CornerRadius="3" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
                             <ScrollViewer x:Name="DropDownScrollViewer">
                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
@@ -149,7 +149,7 @@
                                 </Grid>
                             </ScrollViewer>
                         </Border>
-                    </Themes:SystemDropShadowChrome>
+                    </theme:SystemDropShadowChrome>
                 </Popup>
                 <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}">
                     <Image Source="arrow.png" Stretch="Fill"/>
@@ -297,7 +297,7 @@
                                         <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
                                     </Canvas>
                                     <StackPanel Grid.ColumnSpan="2">
-                                        <Button Content="+" Style="{DynamicResource ButtonStyle4}" Click="Open_Add_0_Page" x:Name="add_locBtn"/>
+                                        <Button Content="+" Style="{DynamicResource ButtonStyle4}" x:Name="add_locBtn" Click="Open_Add_0_Page"/>
                                         <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                     </StackPanel>
                                 </Grid>
@@ -313,6 +313,36 @@
                 </Border>
             </Grid>
         </ControlTemplate>
+        <ControlTemplate x:Key="ComboBoxTemplatelist" TargetType="{x:Type ComboBox}">
+            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.05*"/>
+                </Grid.ColumnDefinitions>
+                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                    <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                        <Border x:Name="dropDownBorder" Background="#262626" BorderBrush="#747474" BorderThickness="1" CornerRadius="3">
+                            <ScrollViewer x:Name="DropDownScrollViewer">
+                                <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
+                                    <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                        <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                    </Canvas>
+                                    <StackPanel Grid.ColumnSpan="2">
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </theme:SystemDropShadowChrome>
+                </Popup>
+                <ToggleButton x:Name="toggleButton" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle3}">
+                    <Image Source="arrow.png" Stretch="Uniform"/>
+                </ToggleButton>
+                <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" BorderBrush="#606060" BorderThickness="0" CornerRadius="5 0 0 5">
+                    <TextBox x:Name="PART_EditableTextBox" Foreground="White" FontSize="16" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="Center"/>
+                </Border>
+            </Grid>
+        </ControlTemplate>
         <Style x:Key="ToggleButtonStyle3" TargetType="{x:Type ToggleButton}">
             <Setter Property="Background" Value="#3958FC"/>
             <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -324,7 +354,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0 1 1 1" CornerRadius="0 5 5 0" SnapsToDevicePixels="true">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="0 5 5 0" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                     </ControlTemplate>
@@ -381,7 +411,7 @@
                     <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                 </Grid.ColumnDefinitions>
                 <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
-                    <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                    <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                         <Border x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" CornerRadius="3">
                             <ScrollViewer x:Name="DropDownScrollViewer">
                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
@@ -395,7 +425,7 @@
                                 </Grid>
                             </ScrollViewer>
                         </Border>
-                    </Themes:SystemDropShadowChrome>
+                    </theme:SystemDropShadowChrome>
                 </Popup>
                 <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton1}">
                     <Image Source="arrow.png" Stretch="Fill"/>
@@ -636,7 +666,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.2*"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -701,8 +731,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.5*"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="select_tags" Grid.Column="1">
                     <Grid.ColumnDefinitions>
@@ -730,17 +760,21 @@
                 <RowDefinition Height="0.2*"/>
                 <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
-            <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserDeleteRows="True" CanUserAddRows="True" CanUserSortColumns="True" x:Name="list" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+            <DataGrid x:Name="list" Style="{DynamicResource DataGridStyle1}" CanUserDeleteRows="True" CanUserAddRows="True" CanUserSortColumns="True" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
                 <FrameworkElement.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>
                 </FrameworkElement.Resources>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="ФИО" Width="*" >
+                    <DataGridTemplateColumn Header="ФИО" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox x:Name="ComboBox_employee"  Template="{DynamicResource ComboBoxTemplate}" IsEditable="True" IsReadOnly="False"/>
+                                <StackPanel Orientation="Vertical">
+                                    <controls:AutoCompleteBox ItemsSource="{Binding Name}">
+                                        
+                                    </controls:AutoCompleteBox>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
@@ -767,7 +801,7 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Кол-во" Width="0.3*">
+                    <DataGridTemplateColumn Header="Кол-во" Width="0.2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -775,7 +809,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="0.2in"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Number}"/>
+                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Count}"/>
                                     <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -803,7 +837,7 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Дата" Width="0.5*">
+                    <DataGridTemplateColumn Header="Дата" Width="0.3*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <DatePicker SelectedDate="{Binding Date}" Style="{DynamicResource DatePickerStyle1}"/>
@@ -820,18 +854,9 @@
                         </DataGridTemplateColumn.HeaderStyle>
 
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Комментарий" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Style="{DynamicResource TextBoxlistStyle}" Text="{Binding Location}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <TextBox Style="{DynamicResource TextBoxlistStyle}" Text="{Binding Location}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                        <DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTextColumn Header="Комментарий" Width="*" Binding="{Binding Comm,Mode=TwoWay}" EditingElementStyle="{DynamicResource TextBoxlistStyle}">
+
+                        <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
@@ -839,8 +864,8 @@
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
-                        </DataGridTemplateColumn.HeaderStyle>
-                    </DataGridTemplateColumn>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn IsReadOnly="True" Width="0.1*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">

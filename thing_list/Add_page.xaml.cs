@@ -21,22 +21,32 @@ namespace thing_list
         const string locBtn_name = "add_locBtn";
         const string emplBtn_name = "add_emplBtn";
         const string addBtn = "Добавить запись";
-        const string editBtn = "Изменить запись";
-
+        const string editBtn = "Добавить запись";
         public Add_page(MainWindow _window1, Application_Context context, Main_page main)
         {
             InitializeComponent();
             db = context; ;
             window1 = _window1;
             main_Page = main;
-            list.ItemsSource = new List<Thing_employees>();
+            List<Thing_employees> thing_s = new List<Thing_employees>();
+            thing_s.Add(new Thing_employees());
+            list.ItemsSource = thing_s;
         }
 
         public class Thing_employees
         {
             public int id_emp { get; set; }
-            public Thing_employees(){ }
+            public Thing_employees() 
+            {
+                foreach (Employee item in db.Employees)
+                {
+                    Name.Add($"{item.surname} {item.name} {item.patronymic}");
+                }
+            }
             public string Count { get; set; }
+            public List<string> Name { get; set; } = new ();
+            Application_Context db = new Application_Context();
+
             public DateTime? Date { get; set; }
             public string? Comm { get; set; }
         }
@@ -48,7 +58,7 @@ namespace thing_list
             ComboBox_location.Text = "";
             count_things.Text = "0";
             select_tags.Children.RemoveRange(0, select_tags.Children.Count);
-            Add_btn.Content = "Добавить запись";
+            Add_btn.Content = addBtn;
             tag_col = 0;
 
         }
@@ -76,7 +86,7 @@ namespace thing_list
             }
 
 
-            Add_btn.Content = "Изменить запись";
+            Add_btn.Content = editBtn;
         }
 
 
