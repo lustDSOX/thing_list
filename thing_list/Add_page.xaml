@@ -3,11 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:controls='clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit'
+        xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Add_page" Background="#0D0D0D"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:toolkit1="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit">
     <Page.Resources>
         <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#3958FC"/>
@@ -775,8 +775,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="0.4in"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <controls:AutoCompleteBox ItemsSource="{Binding Name, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
+                                    <toolkit1:AutoCompleteBox ItemsSource="{Binding Name}" SelectedItem="{Binding SelectedName, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
                                     <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
                                 </Grid>
                             </DataTemplate>
@@ -788,8 +787,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="0.4in"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <controls:AutoCompleteBox ItemsSource="{Binding Name, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
+                                    <toolkit1:AutoCompleteBox ItemsSource="{Binding Name}" SelectedItem="{Binding SelectedName, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
                                     <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
                                 </Grid>
                             </DataTemplate>

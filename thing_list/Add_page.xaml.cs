@@ -43,6 +43,7 @@ namespace thing_list
                 }
             }
             public string Count { get; set; }
+            public string SelectedName { get; set; }
             public List<string> Name { get; set; } = new();
             Application_Context db = new Application_Context();
 
@@ -350,6 +351,9 @@ namespace thing_list
                             {
                                 if (item.Count != null && item.Date != null)
                                 {
+                                    string[] fio = item.SelectedName.Split(' ');
+                                    Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e=>e.name == fio[1]).Where(e=>e.patronymic == fio[2]).FirstOrDefault();
+                                    thing.Employees.Add(employee);
                                 }
                                     
                             }
@@ -380,10 +384,15 @@ namespace thing_list
                     editing_thing.Employees.Clear();
                     try
                     {
-                        foreach (Thing_employees item in list.Items)
+                        foreach (Thing_employees item in thing_s)
                         {
-                            if (item.Count != null && item.Date != null) ;
-                                
+                            if (item.Count != null && item.Date != null)
+                            {
+                                string[] fio = item.SelectedName.Split(' ');
+                                Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
+                                editing_thing.Employees.Add(employee);
+                            }
+
                         }
                     }
                     catch { }
