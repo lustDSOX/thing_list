@@ -28,6 +28,9 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#4B69FC"/>
                 </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Margin" Value="1"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
@@ -227,7 +230,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
 
-                        <Border x:Name="border" CornerRadius="0 0 0 5" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="0 0 0 5" BorderThickness="0" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                             <Image Source="arrow.png">
                             </Image>
                         </Border>
@@ -280,13 +283,16 @@
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Margin" Value="1"/>
                 </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Margin" Value="1"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
         <ControlTemplate x:Key="ComboBoxTemplate2" TargetType="{x:Type ComboBox}">
             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.3in"/>
                 </Grid.ColumnDefinitions>
                 <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                     <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
@@ -484,7 +490,7 @@
             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="28.8"/>
                 </Grid.ColumnDefinitions>
                 <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                     <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
@@ -703,7 +709,7 @@
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.3in"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Padding="0 0 30 0" x:Name="count_things" Text="0" Style="{DynamicResource TextBoxStyle3}" TextChanged="TextBox_TextChanged"/>
                     <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
@@ -760,39 +766,38 @@
                 <RowDefinition Height="0.2*"/>
                 <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
-            <DataGrid x:Name="list" Style="{DynamicResource DataGridStyle1}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+            <DataGrid x:Name="list" Style="{DynamicResource DataGridStyle1}" CanUserAddRows="True" CanUserResizeColumns="True" CanUserDeleteRows="True" CanUserSortColumns="True" Grid.Row="1" Grid.Column="1"  AutoGenerateColumns="False" IsReadOnly="False" HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
                 <FrameworkElement.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>
                 </FrameworkElement.Resources>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="ФИО" Width="*">
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="0.4in"/>
-                                    </Grid.ColumnDefinitions>
-                                    <toolkit1:AutoCompleteBox ItemsSource="{Binding Name}" SelectedItem="{Binding SelectedName, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
-                                    <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="0.4in"/>
-                                    </Grid.ColumnDefinitions>
-                                    <toolkit1:AutoCompleteBox ItemsSource="{Binding Name}" SelectedItem="{Binding SelectedName, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
-                                    <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page" x:Name="add_emplBtn"/>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.HeaderStyle>
+                   <DataGridTextColumn Header="ФИО" Width="*" Binding="{Binding SelectedName,Mode=TwoWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="0.4in"/>
+                                                </Grid.ColumnDefinitions>
+                                                <toolkit1:AutoCompleteBox ItemsSource="{Binding Name}" SelectedItem="{Binding SelectedName, Mode=TwoWay}" Background="Transparent" Foreground="white" BorderThickness="0"/>
+                                                <Button Content="+" Grid.Column="1" Style="{DynamicResource ButtonStyle1}" Click="Open_Add_0_Page"  x:Name="add_emplBtn"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
@@ -814,35 +819,46 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-                        </DataGridTemplateColumn.HeaderStyle>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Кол-во" Width="0.2*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="0.2in"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Path=Count}"/>
-                                    <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <Button x:Name="plus" Click="Update_count" Grid.Row="0" Style="{DynamicResource ButtonStyle2}">
-                                                <Button.LayoutTransform>
-                                                    <RotateTransform Angle="180" />
-                                                </Button.LayoutTransform>
-                                            </Button>
-                                            <Button x:Name="minus" Click="Update_count" Grid.Row="1" Style="{DynamicResource ButtonStyle3}"/>
-                                        </Grid>
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.HeaderStyle>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Кол-во" Width="0.2*" Binding="{Binding Count,Mode =TwoWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="0.2in"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Style="{DynamicResource TextBoxStyle3}" BorderThickness="0" TextChanged="TextBox_TextChanged" Text="{Binding Path=Count}"/>
+                                        <Border Grid.Column="1" BorderBrush="#606060" CornerRadius="0 5 5 0" BorderThickness="0 1 1 1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button x:Name="plus" Click="Update_count" Grid.Row="0" Style="{DynamicResource ButtonStyle2}">
+                                                    <Button.LayoutTransform>
+                                                        <RotateTransform Angle="180" />
+                                                    </Button.LayoutTransform>
+                                                </Button>
+                                                <Button x:Name="minus" Click="Update_count" Grid.Row="1" Style="{DynamicResource ButtonStyle3}"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
                                 <Setter Property="BorderBrush" Value="White"/>
@@ -850,8 +866,8 @@
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
-                        </DataGridTemplateColumn.HeaderStyle>
-                    </DataGridTemplateColumn>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn Header="Дата" Width="0.3*">
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
@@ -920,7 +936,6 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="White"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#919191"/>
@@ -947,6 +962,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="Add_btn" Grid.Column="1" Content="Добавить запись" Style="{DynamicResource ButtonStyle1}" Click="Add_btn_Click"/>
+                <Image Source="save.png" Grid.Column="2" HorizontalAlignment="Left" Opacity="0" x:Name="save_img" Margin="0.06in"/>
             </Grid>
             
         </Grid>

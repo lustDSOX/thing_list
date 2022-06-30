@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +15,7 @@ namespace thing_list
         MainWindow window1;
         Application_Context db;
         Add_page add_Page;
-        string def_search = "поиск";
+        string def_search = "Поиск";
         List<Data_thing> things = new List<Data_thing>();
         public Main_page(MainWindow _window1)
         {
@@ -108,7 +110,7 @@ namespace thing_list
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Data_thing thing = list.SelectedItem as Data_thing;
+            Data_thing thing = list.SelectedValue as Data_thing;
             Thing item = db.Things.Find(thing.id);
 
             add_Page.Clear();
@@ -132,9 +134,10 @@ namespace thing_list
 
         private void list_LoadingRow(object sender, DataGridRowEventArgs e)
         {
+            List<Taken_things> taken_s = db.Taken_Things.ToList();
             Data_thing thing = (Data_thing)e.Row.DataContext;
             Thing sel_t = db.Things.Find(thing.id);
-            if (sel_t.Employees.Count != 0)
+            if (sel_t.Taken_Things.Count != 0)
                 e.Row.Foreground = new SolidColorBrush(Colors.Blue);
         }
 
@@ -156,6 +159,41 @@ namespace thing_list
                 if (list != null)
                     list.ItemsSource = things;
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                StreamReader sr = new StreamReader("columnW.json");
+                dynamic gridLayout = JsonConvert.DeserializeObject(sr.ReadLine());
+                foreach (var column in gridLayout.columns)
+                {
+                    var gridColumn = list.Columns.FirstOrDefault(c => c.Header?.ToString() == column.header?.Value);
+                    gridColumn.Width = column.width;
+                }
+            }
+            catch { }
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var gridLayout = new
+                {
+                    columns = list.Columns.Select(c => new { header = c.Header?.ToString(), width = c.Width }).ToArray()
+                };
+                StreamWriter sw = new StreamWriter("columnW.json");
+                sw.WriteLine(JsonConvert.SerializeObject(gridLayout));
+                sw.Close(); ;
+            }
+            catch { }
+        }
+
+        private void Open_settings(object sender, RoutedEventArgs e)
+        {
+            window1.frame.Navigate(new Settings());
         }
     }
 }

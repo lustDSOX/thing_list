@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace thing_list
 {
@@ -59,6 +60,7 @@ namespace thing_list
             count_things.Text = "0";
             select_tags.Children.RemoveRange(0, select_tags.Children.Count);
             Add_btn.Content = addBtn;
+            ComboBox_tags.Text = "";
             tag_col = 0;
             thing_s.Clear();
             list.Items.Refresh();
@@ -194,7 +196,7 @@ namespace thing_list
 
                 ColumnDefinition columnDefinition0 = new ColumnDefinition();
                 ColumnDefinition columnDefinition1 = new ColumnDefinition();
-                columnDefinition0.Width = new GridLength(4, GridUnitType.Star);
+                columnDefinition0.Width = new GridLength(3, GridUnitType.Star);
                 grid.ColumnDefinitions.Add(columnDefinition0);
                 grid.ColumnDefinitions.Add(columnDefinition1);
                 grid.Name = $"grid_{tag_col}";
@@ -338,6 +340,10 @@ namespace thing_list
 
         private void Add_btn_Click(object sender, RoutedEventArgs e)
         {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = 1;
+            animation.To = 0;
+            animation.Duration = TimeSpan.FromSeconds(2);
             switch (Add_btn.Content)
             {
                 case addBtn:
@@ -366,14 +372,13 @@ namespace thing_list
                                     string[] fio = item.SelectedName.Split(' ');
                                     Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
                                     Taken_things taken_Things = new Taken_things();
-                                    taken_Things.id_employee = employee.id;
-                                    taken_Things.id_thing = editing_thing.id;
                                     taken_Things.employee = employee;
                                     taken_Things.thing = editing_thing;
                                     taken_Things.count = item.Count;
                                     taken_Things.date = item.Date;
                                     taken_Things.comm = item.Comm;
-                                    editing_thing.Taken_Things.Add(taken_Things);
+                                    thing.Taken_Things.Add(taken_Things);
+                                    
                                 }
 
                             }
@@ -386,6 +391,8 @@ namespace thing_list
                         db.SaveChanges();
                         main_Page.Update_list(true);
                     }
+                    save_img.Opacity = 1;
+                    save_img.BeginAnimation(Image.OpacityProperty, animation);
                     break;
 
                 case editBtn:
@@ -402,8 +409,7 @@ namespace thing_list
                     }
 
                     editing_thing.Taken_Things.Clear();
-                    try
-                    {
+
                         foreach (Thing_employees item in thing_s)
                         {
                             if (item.Count != null && item.Date != null)
@@ -411,8 +417,6 @@ namespace thing_list
                                 string[] fio = item.SelectedName.Split(' ');
                                 Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
                                 Taken_things taken_Things = new Taken_things();
-                                taken_Things.id_employee = employee.id;
-                                taken_Things.id_thing = editing_thing.id;
                                 taken_Things.employee = employee;
                                 taken_Things.thing = editing_thing;
                                 taken_Things.count = item.Count;
@@ -422,8 +426,7 @@ namespace thing_list
                             }
 
                         }
-                    }
-                    catch { }
+
 
                     foreach (Location loc in db.Locations)
                     {
@@ -453,9 +456,11 @@ namespace thing_list
                     }
                     editing_item.Tag = tags;
                     main_Page.list.Items.Refresh();
-
+                    save_img.Opacity = 1;
+                    save_img.BeginAnimation(Image.OpacityProperty, animation);
                     break;
             }
         }
+
     }
 }

@@ -6,7 +6,9 @@
       xmlns:local="clr-namespace:thing_list" xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Main_page" Background="#0D0D0D">
+      Title="Main_page" Background="#0D0D0D"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
 
     <Page.Resources>
         <Style x:Key="FocusVisual">
@@ -313,28 +315,30 @@
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="0.2in"/>
+            <ColumnDefinition Width="4in"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.2in"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5in"/>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.3*"/>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
+        <Button Grid.Column="4" HorizontalAlignment="Right" Visibility="Hidden" BorderThickness="0" Background="Transparent" Margin="0 0.1in 0 0" VerticalAlignment="Top" Width="0.3in" Click="Open_settings">
+            <Image Source="settings.png" Stretch="Uniform"/>
+        </Button>
         <Grid Grid.Column="3" MinWidth="0" MaxWidth="300"/>
-        <TextBox x:Name="search" Grid.Column="1" TextChanged="TextBox_TextChanged" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
+        <TextBox x:Name="search" Grid.Column="1" TextChanged="TextBox_TextChanged" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Padding="10 0 0 0" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2" Text="Поиск" Style="{DynamicResource TextBoxStyle1}" GotFocus="Got_focus" LostFocus="Lost_focus"/>
         <Button  Grid.Column="4" HorizontalAlignment="Right" Padding="50 0" Grid.Row="1" Content="Добавить запись" Foreground="White" Click="Button_Click" Style="{DynamicResource ButtonStyle1}" />
-        <DataGrid Style="{DynamicResource DataGridStyle1}" CanUserSortColumns="True" x:Name="list" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"  AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
+        <DataGrid x:Name="list"  Style="{DynamicResource DataGridStyle1}" Foreground="White" CanUserSortColumns="True" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"  AutoGenerateColumns="False" IsReadOnly="True" LoadingRow="list_LoadingRow"  HorizontalGridLinesBrush="#747474" VerticalGridLinesBrush="#747474">
             <FrameworkElement.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="white"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>
             </FrameworkElement.Resources>
             <DataGrid.Columns>
@@ -363,7 +367,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="номер" Binding="{Binding Number}" Width="0.5*">
+                <DataGridTextColumn Header="Номер" Binding="{Binding Number}" Width="0.5*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -374,7 +378,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="кол-во" Binding="{Binding Count}" Width="0.1*">
+                <DataGridTextColumn Header="Кол-во" Binding="{Binding Count}" Width="0.1*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -385,7 +389,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="расположение" Binding="{Binding Location}" Width="0.8*">
+                <DataGridTextColumn Header="Расположение" Binding="{Binding Location}" Width="0.8*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -396,7 +400,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="категории" Binding="{Binding Tag}" Width="0.2*">
+                <DataGridTextColumn Header="Категории" Binding="{Binding Tag}" Width="0.2*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="#0D0D0D"/>
@@ -410,9 +414,9 @@
             </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
+
                     <EventSetter Event="MouseDoubleClick" Handler="Grid_MouseLeftButtonDown"/>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="White"/>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="#919191"/>

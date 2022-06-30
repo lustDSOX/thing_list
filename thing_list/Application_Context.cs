@@ -13,6 +13,7 @@ namespace thing_list
         public DbSet<Location> Locations { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Thing> Things { get; set; } = null!;
+        public DbSet<Taken_things> Taken_Things  { get; set; } = null!;
         public Application_Context() => Database.EnsureCreated();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

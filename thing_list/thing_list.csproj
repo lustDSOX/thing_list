@@ -12,12 +12,16 @@
     <None Remove="arrow_back.png" />
     <None Remove="icon_calendar.png" />
     <None Remove="save.png" />
+    <None Remove="settings.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.1.94" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+    <PackageReference Include="Json.Net" Version="1.0.33" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +31,7 @@
     </Resource>
     <Resource Include="icon_calendar.png" />
     <Resource Include="save.png" />
+    <Resource Include="settings.png" />
   </ItemGroup>
 
   <ItemGroup>
