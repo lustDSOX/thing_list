@@ -60,6 +60,8 @@ namespace thing_list
             select_tags.Children.RemoveRange(0, select_tags.Children.Count);
             Add_btn.Content = addBtn;
             tag_col = 0;
+            thing_s.Clear();
+            list.Items.Refresh();
 
         }
         public void Edit_thing(Thing thing, Data_thing item_list)
@@ -83,6 +85,16 @@ namespace thing_list
             foreach (Tag tag in thing.Tags)
             {
                 Add_selected_tag(tag.name);
+            }
+            foreach (Taken_things item in thing.Taken_Things)
+            {
+                Employee employee = db.Employees.Where(e => e.id == item.id_employee).FirstOrDefault();
+                Thing_employees thing_Employees = new Thing_employees();
+                thing_Employees.SelectedName = $"{employee.surname} {employee.name} {employee.patronymic}";
+                thing_Employees.Count = item.count;
+                thing_Employees.Date = item.date;
+                thing_Employees.Comm = item.comm;
+                thing_s.Add(thing_Employees);
             }
 
 
@@ -352,10 +364,18 @@ namespace thing_list
                                 if (item.Count != null && item.Date != null)
                                 {
                                     string[] fio = item.SelectedName.Split(' ');
-                                    Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e=>e.name == fio[1]).Where(e=>e.patronymic == fio[2]).FirstOrDefault();
-                                    thing.Employees.Add(employee);
+                                    Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
+                                    Taken_things taken_Things = new Taken_things();
+                                    taken_Things.id_employee = employee.id;
+                                    taken_Things.id_thing = editing_thing.id;
+                                    taken_Things.employee = employee;
+                                    taken_Things.thing = editing_thing;
+                                    taken_Things.count = item.Count;
+                                    taken_Things.date = item.Date;
+                                    taken_Things.comm = item.Comm;
+                                    editing_thing.Taken_Things.Add(taken_Things);
                                 }
-                                    
+
                             }
                         }
                         catch { }
@@ -381,7 +401,7 @@ namespace thing_list
                         editing_thing.Tags.Add(db.Tags.Where(t => t.name == tag_selected).FirstOrDefault());
                     }
 
-                    editing_thing.Employees.Clear();
+                    editing_thing.Taken_Things.Clear();
                     try
                     {
                         foreach (Thing_employees item in thing_s)
@@ -390,7 +410,15 @@ namespace thing_list
                             {
                                 string[] fio = item.SelectedName.Split(' ');
                                 Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
-                                editing_thing.Employees.Add(employee);
+                                Taken_things taken_Things = new Taken_things();
+                                taken_Things.id_employee = employee.id;
+                                taken_Things.id_thing = editing_thing.id;
+                                taken_Things.employee = employee;
+                                taken_Things.thing = editing_thing;
+                                taken_Things.count = item.Count;
+                                taken_Things.date = item.Date;
+                                taken_Things.comm = item.Comm;
+                                editing_thing.Taken_Things.Add(taken_Things);
                             }
 
                         }
@@ -408,6 +436,7 @@ namespace thing_list
 
                     Location location_add = db.Locations.Where(l => l.name == ComboBox_location.Text).FirstOrDefault();
                     location_add.Things.Add(editing_thing);
+                    db.SaveChanges();
 
                     editing_item.Name = editing_thing.name;
                     editing_item.Number = editing_thing.number;
@@ -424,7 +453,7 @@ namespace thing_list
                     }
                     editing_item.Tag = tags;
                     main_Page.list.Items.Refresh();
-                    db.SaveChanges();
+
                     break;
             }
         }

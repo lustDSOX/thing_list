@@ -13,7 +13,8 @@ namespace thing_list
         public int id_employee { get; set; }
         public Employee employee { get; set; }
         public DateTime? date { get; set; }
-        public string comm { get; set; }
+        public string? comm { get; set; }
+        public string count { get; set; }
         public Taken_things() { }
     }
 }
