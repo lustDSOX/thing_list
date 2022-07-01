@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,7 +17,7 @@ namespace thing_list
         Application_Context db;
         Add_page add_Page;
         string def_search = "Поиск";
-        List<Data_thing> things = new List<Data_thing>();
+        public List<Data_thing> things = new List<Data_thing>();
         public Main_page(MainWindow _window1)
         {
             InitializeComponent();
@@ -45,7 +46,15 @@ namespace thing_list
                         }
                     }
                     data_Thing.Number = thing.number;
-                    data_Thing.Name = thing.name;
+                    Regex pattern = new Regex(@"\w{4}.[0-9]{6}.[0-9]{3}$");
+                    string name = thing.name;
+                    MatchCollection d_number = pattern.Matches(name);
+                    try
+                    {
+                        data_Thing.D_number = d_number[0].Value;
+                    }
+                    catch { }
+                    data_Thing.Name = pattern.Replace(name, "");
                     data_Thing.Count = thing.count;
 
                     string tags = "";
@@ -69,7 +78,15 @@ namespace thing_list
                 Data_thing data_Thing = new Data_thing();
                 Thing thing = db.Things.OrderBy(t => t.id).Last();
                 data_Thing.id = thing.id;
-                data_Thing.Name = thing.name;
+                Regex pattern = new Regex(@"\w{4}.[0-9]{6}.[0-9]{3}$");
+                string name = thing.name;
+                MatchCollection d_number = pattern.Matches(name);
+                try
+                {
+                    data_Thing.D_number = d_number[0].Value;
+                }
+                catch { }
+                data_Thing.Name = pattern.Replace(name, "");
                 data_Thing.Number = thing.number;
                 data_Thing.Count = thing.count;
                 foreach (Location location in db.Locations)
@@ -134,11 +151,17 @@ namespace thing_list
 
         private void list_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            List<Taken_things> taken_s = db.Taken_Things.ToList();
             Data_thing thing = (Data_thing)e.Row.DataContext;
-            Thing sel_t = db.Things.Find(thing.id);
-            if (sel_t.Taken_Things.Count != 0)
-                e.Row.Foreground = Brushes.LightBlue;
+            List<Taken_things> taken_s = db.Taken_Things.Where(t=>t.id_thing == thing.id).ToList();
+            if (taken_s.Count != 0)
+            { 
+                e.Row.Foreground = Brushes.LightSkyBlue; 
+            }
+            else
+            {
+                e.Row.Foreground = Brushes.White;
+            }
+
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -147,6 +170,7 @@ namespace thing_list
             {
                 var filter_name = things.Where(t => t.Name.ToLower().Contains(search.Text.ToLower()));
                 var filter_number = things.Where(t => t.Number.ToLower().Contains(search.Text.ToLower()));
+                var filter_dnumber = things.Where(t => t.D_number.ToLower().Contains(search.Text.ToLower()));
                 var filter_count = things.Where(t => t.Count.ToString().ToLower().Contains(search.Text.ToLower()));
                 var filter_location = things.Where(t => t.Location.ToLower().Contains(search.Text.ToLower()));
                 var filter_tag = things.Where(t => t.Tag.ToLower().Contains(search.Text.ToLower()));

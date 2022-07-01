@@ -10,6 +10,7 @@ namespace thing_list
     {
         public int id { get; set; }
         public string Name { get; set; }
+        public string D_number { get; set; }
         public string Number { get; set; }
         public string Location { get; set; }
         public string Tag { get; set; }

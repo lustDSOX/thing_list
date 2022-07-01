@@ -7,7 +7,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Add_page" Background="#0D0D0D"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:toolkit1="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit">
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:toolkit1="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
     <Page.Resources>
         <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#3958FC"/>
@@ -30,6 +32,26 @@
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Margin" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ButtonStyledel" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Height" Value="0.4in"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -243,6 +265,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
         <Style x:Key="ButtonStyle3" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#3958FC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -292,6 +315,7 @@
             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2in"/>
                     <ColumnDefinition Width="0.3in"/>
                 </Grid.ColumnDefinitions>
                 <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
@@ -311,9 +335,12 @@
                         </Border>
                     </theme:SystemDropShadowChrome>
                 </Popup>
-                <ToggleButton x:Name="toggleButton" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle3}">
+                <ToggleButton x:Name="toggleButton" Grid.Column="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource ToggleButtonStyle3}">
                     <Image Source="arrow.png" Stretch="Uniform"/>
                 </ToggleButton>
+                <Border Grid.Column="1" Background="red">
+                <Button Content="✖" Foreground="white" Style="{DynamicResource ButtonStyledel}" FontSize="10" x:Name="del_location" Click="del_location_Click"/>
+                </Border>
                 <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" BorderBrush="#606060" BorderThickness="1 1 0 1" CornerRadius="5 0 0 5">
                     <TextBox x:Name="PART_EditableTextBox" Foreground="White" FontSize="16" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="Center"/>
                 </Border>
@@ -807,7 +834,11 @@
 
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Комментарий" Width="*" Binding="{Binding Comm,Mode=TwoWay}" EditingElementStyle="{DynamicResource TextBoxlistStyle}">
-
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#0D0D0D"/>
@@ -844,7 +875,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="✖" Command="Delete" Background="Red" Style="{DynamicResource ButtonStyle4}"/>
+                                <Button Content="✖" Click="Del_tEmployee" Background="Red" Style="{DynamicResource ButtonStyle4}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -879,6 +910,9 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="Add_btn" Grid.Column="1" Content="Добавить запись" Style="{DynamicResource ButtonStyle1}" Click="Add_btn_Click"/>
                 <Image Source="save.png" Grid.Column="2" HorizontalAlignment="Left" Opacity="0" x:Name="save_img" Margin="0.06in"/>
+                <Button x:Name="del" Grid.Column="2" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyledel}" Margin="10 0" Click="Del_thing" BorderThickness="0" Background="Transparent" Width="0.5in">
+                    <Image Source="/del.png" Stretch="Uniform"/>
+                </Button>
             </Grid>
             
         </Grid>

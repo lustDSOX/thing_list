@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -378,7 +380,7 @@ namespace thing_list
                                     taken_Things.date = item.Date;
                                     taken_Things.comm = item.Comm;
                                     thing.Taken_Things.Add(taken_Things);
-                                    
+
                                 }
 
                             }
@@ -410,22 +412,22 @@ namespace thing_list
 
                     editing_thing.Taken_Things.Clear();
 
-                        foreach (Thing_employees item in thing_s)
+                    foreach (Thing_employees item in thing_s)
+                    {
+                        if (item.Count != null && item.Date != null)
                         {
-                            if (item.Count != null && item.Date != null)
-                            {
-                                string[] fio = item.SelectedName.Split(' ');
-                                Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
-                                Taken_things taken_Things = new Taken_things();
-                                taken_Things.employee = employee;
-                                taken_Things.thing = editing_thing;
-                                taken_Things.count = item.Count;
-                                taken_Things.date = item.Date;
-                                taken_Things.comm = item.Comm;
-                                editing_thing.Taken_Things.Add(taken_Things);
-                            }
-
+                            string[] fio = item.SelectedName.Split(' ');
+                            Employee employee = db.Employees.Where(e => e.surname == fio[0]).Where(e => e.name == fio[1]).Where(e => e.patronymic == fio[2]).FirstOrDefault();
+                            Taken_things taken_Things = new Taken_things();
+                            taken_Things.employee = employee;
+                            taken_Things.thing = editing_thing;
+                            taken_Things.count = item.Count;
+                            taken_Things.date = item.Date;
+                            taken_Things.comm = item.Comm;
+                            editing_thing.Taken_Things.Add(taken_Things);
                         }
+
+                    }
 
 
                     foreach (Location loc in db.Locations)
@@ -462,5 +464,87 @@ namespace thing_list
             }
         }
 
+        private void Del_thing(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Действительно удалить данную деталь?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            if (result == MessageBoxResult.Yes)
+            {
+                db.Things.Remove(editing_thing);
+                db.SaveChanges();
+                main_Page.things.Clear();
+                main_Page.Update_list(false);
+                window1.frame.Navigate(main_Page);
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                StreamReader sr = new StreamReader("columnW_add.json");
+                dynamic gridLayout = JsonConvert.DeserializeObject(sr.ReadLine());
+                foreach (var column in gridLayout.columns)
+                {
+                    var gridColumn = list.Columns.FirstOrDefault(c => c.Header?.ToString() == column.header?.Value);
+                    gridColumn.Width = column.width;
+                }
+            }
+            catch { }
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var gridLayout = new
+                {
+                    columns = list.Columns.Select(c => new { header = c.Header?.ToString(), width = c.Width }).ToArray()
+                };
+                StreamWriter sw = new StreamWriter("columnW_add.json");
+                sw.WriteLine(JsonConvert.SerializeObject(gridLayout));
+                sw.Close(); ;
+            }
+            catch { }
+        }
+        private void Del_tEmployee(object sender, RoutedEventArgs e)
+        {
+            var item = list.SelectedItem;
+            try
+            {
+                Thing_employees employee = (Thing_employees)item;
+                MessageBoxResult result = MessageBox.Show("Действительно удалить данного сотрудника?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                if (result == MessageBoxResult.Yes)
+                {
+                    thing_s.Remove(employee);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Значение пусто");
+            }
+            
+        }
+
+        private void del_location_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBox_location.Text == "")
+            {
+                MessageBox.Show("Значение пусто");
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Действительно удалить данное расположение?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Location location = db.Locations.Where(l => l.name == ComboBox_location.Text).FirstOrDefault();
+                    db.Locations.Remove(location);
+                    db.SaveChanges();
+                    ComboBox_location.Items.Clear();
+                    Update_ListLocations(false);
+
+                }
+            }
+           
+        }
     }
 }
