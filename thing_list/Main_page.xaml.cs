@@ -138,7 +138,7 @@ namespace thing_list
             Data_thing thing = (Data_thing)e.Row.DataContext;
             Thing sel_t = db.Things.Find(thing.id);
             if (sel_t.Taken_Things.Count != 0)
-                e.Row.Foreground = new SolidColorBrush(Colors.Blue);
+                e.Row.Foreground = Brushes.LightBlue;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

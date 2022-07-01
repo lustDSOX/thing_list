@@ -1,16 +1,44 @@
 ﻿<Page x:Class="thing_list.Settings"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:thing_list"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Settings"
        Background="#0D0D0D"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
-
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <Page.DataContext>
+        <local:All_settings/>
+    </Page.DataContext>
     <Page.Resources>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{Binding color}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Margin" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <local:Convert_size x:Key="converter"/>
         <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -19,7 +47,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border  BorderThickness="0" Background="#3F3F3F" Height="0.07in" CornerRadius="2"/>
+                        <Border  BorderThickness="0" Background="#3F3F3F" Height="0.15in" CornerRadius="3 5 5 3"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -31,7 +59,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border SnapsToDevicePixels="True" Background="#3958FC"  BorderThickness="0" CornerRadius="2" Height="0.07in"/>
+                        <Border SnapsToDevicePixels="True" Background="#3958FC"  BorderThickness="0" CornerRadius="5 3 3 5" Height="0.15in"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -43,7 +71,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Ellipse Height="0.15in" Width="0.15in" Fill="White"></Ellipse>
+                        <Ellipse Height="0.3in" Width="0.3in" Fill="White"></Ellipse>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -52,13 +80,13 @@
         <ControlTemplate x:Key="Slider"  TargetType="Slider">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.2in" />
-                    <RowDefinition Height="0.2in" />
-                    <RowDefinition Height="0.2in" />
-                </Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="1in" />
+                    <RowDefinition Height="0.7in" />
+                </Grid.RowDefinitions>       
                 <Track Grid.Row="1" x:Name="PART_Track"   >
                     <Track.DecreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource SliderRepeatButton1}" Height="0.2in"  Command="Slider.DecreaseLarge" />
+                        <RepeatButton Style="{StaticResource SliderRepeatButton1}" Height="0.7in"  Command="Slider.DecreaseLarge" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
                         <Thumb Style="{StaticResource SliderThumb}"  />
@@ -109,14 +137,202 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Размер шрифта таблиц"/>
-            <Label Grid.Row="2" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Размер шрифта параметров"/>
-            <Label Grid.Row="4" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Цвет фона"/>
+            <Label VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Размер текста таблиц"/>
+            <Label Grid.Row="2" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Размер текста параметров" FontSize="{Binding ElementName=param_fontsizeText, Path=Content}"/>
+            <Label Grid.Row="4" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Цвет фона таблиц"/>
+            <Label Grid.Row="4" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right" Style="{DynamicResource LabelStyle1}" Content="Цвет контуров"/>
             <Label Grid.Row="6" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" Content="Цвет UI-элементов"/>
 
-            <Slider Grid.Row="1" x:Name="table_fontsize" Maximum="60" Minimum="10" Style="{DynamicResource Horizontal_Slider}"/>
-            <Slider Grid.Row="3" x:Name="param_fontsize" Maximum="60" Minimum="10" Style="{DynamicResource Horizontal_Slider}"/>
-            <xctk:ColorPicker/>
+            <Slider Grid.Row="1" x:Name="table_fontsize" Maximum="60" Minimum="10" Style="{DynamicResource Horizontal_Slider}" Value="0"/>
+            <Slider Grid.Row="3" x:Name="param_fontsize" Maximum="60" Minimum="10" Style="{DynamicResource Horizontal_Slider}" Value="0"/>
+            <Label Grid.Row="3" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" x:Name="param_fontsizeText" HorizontalAlignment="Right" VerticalAlignment="Top" Content="{Binding ElementName=param_fontsize, Path=Value, Converter= {StaticResource converter}}"/>
+            <Label Grid.Row="1" VerticalContentAlignment="Bottom" Style="{DynamicResource LabelStyle1}" x:Name="table_fontsizeText" HorizontalAlignment="Right" VerticalAlignment="Top" Content="1"/>
+
+            <xctk:ColorPicker SelectedColorChanged="border_color_SelectedColorChanged" Padding="5" Grid.Row="5" x:Name="border_color" VerticalAlignment="Top" HorizontalAlignment="Right" Width="1in" Background="#262626" BorderThickness="0" ShowDropDownButton="False" AvailableColorsSortingMode="HueSaturationBrightness">
+                <xctk:ColorPicker.ButtonStyle>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton" xmlns:chrome="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=Xceed.Wpf.Toolkit">
+                                    <Grid SnapsToDevicePixels="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="True"
+                                                    CornerRadius="5">
+                                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </xctk:ColorPicker.ButtonStyle>
+            </xctk:ColorPicker>
+            <xctk:ColorPicker SelectedColorChanged="background_color_SelectedColorChanged" Grid.Row="5" x:Name="background_color" VerticalAlignment="Top" HorizontalAlignment="Left" Width="1in" Background="#262626" BorderThickness="0" ShowDropDownButton="False" AvailableColorsSortingMode="HueSaturationBrightness">
+                <xctk:ColorPicker.ButtonStyle>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton" xmlns:chrome="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=Xceed.Wpf.Toolkit">
+                                    <Grid SnapsToDevicePixels="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="True"
+                                                    CornerRadius="5">
+                                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </xctk:ColorPicker.ButtonStyle>
+            </xctk:ColorPicker>
+            <xctk:ColorPicker SelectedColorChanged="ui_color_SelectedColorChanged" Grid.Row="7" x:Name="ui_color" VerticalAlignment="Top" HorizontalAlignment="Left" Width="1in" Background="#262626" BorderThickness="0" ShowDropDownButton="False" AvailableColorsSortingMode="HueSaturationBrightness">
+                <xctk:ColorPicker.ButtonStyle>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton" xmlns:chrome="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=Xceed.Wpf.Toolkit">
+                                    <Grid SnapsToDevicePixels="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="True"
+                                                    CornerRadius="5">
+                                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </xctk:ColorPicker.ButtonStyle>
+            </xctk:ColorPicker>
+
+
         </Grid>
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Row="1" HorizontalAlignment="Center" AutoGenerateColumns="False" IsReadOnly="True" VerticalAlignment="Top" Width="6in" Height="2in" BorderThickness="2" x:Name="border" Style="{DynamicResource DataGridStyle1}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Столбец" Width="*" Binding="{Binding Text}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D0D0D"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridColumnHeader">
+                                            <Border Background="#0D0D0D" BorderThickness="0" >
+                                                <Border x:Name="border"
+                              BorderBrush="White"
+                              BorderThickness="2"
+                              Background="#0D0D0D"
+                              CornerRadius="5 0 0 0">
+                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Столбец" Width="*" Binding="{Binding Text}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D0D0D"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridColumnHeader">
+                                            <Border Background="#0D0D0D" BorderThickness="0" >
+                                                <Border x:Name="border"
+                              BorderBrush="White"
+                              BorderThickness="0 2"
+                              Background="#0D0D0D"
+                              CornerRadius="0 0 0 0">
+                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Столбец" Width="*" Binding="{Binding Text}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D0D0D"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridColumnHeader">
+                                            <Border Background="#0D0D0D" BorderThickness="0" >
+                                                <Border x:Name="border"
+                              BorderBrush="White"
+                              BorderThickness="2"
+                              Background="#0D0D0D"
+                              CornerRadius="0 5 0 0">
+                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="ui_element" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 1in" Width="4in" Height="1in" Style="{DynamicResource ButtonStyle1}"/>
+        </Grid>
+        
     </Grid>
 </Page>
